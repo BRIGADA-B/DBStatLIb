@@ -7,6 +7,7 @@ int main() {
 	DBTableTxt table;
 	string nul;
 	ReadDBTable1(table,nul);
+	//added line for example
 	table.ReadDBTable("C:\\Users\\Влад\\source\\repos\\DBStatLIb\\LibraryTxt\\Students.csv");
 	table.PrintTable(80);
 
