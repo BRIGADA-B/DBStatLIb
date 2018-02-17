@@ -18,7 +18,7 @@ void dbmsLib::ReadDBTable1(DBTableTxt & tab, string tabName)
 	ifstream in(tabName);
 
 	if (!in.is_open()) {
-		cout << "Íå óäàëîñü ïðî÷èòàòü òàáëèöó èç ïóòè: " << tabName << endl;
+		cout << "ÃÃ¥ Ã³Ã¤Ã Ã«Ã®Ã±Ã¼ Ã¯Ã°Ã®Ã·Ã¨Ã²Ã Ã²Ã¼ Ã²Ã Ã¡Ã«Ã¨Ã¶Ã³ Ã¨Ã§ Ã¯Ã³Ã²Ã¨: " << tabName << endl;
 		return;
 	}
 
@@ -40,7 +40,8 @@ void dbmsLib::ReadDBTable1(DBTableTxt & tab, string tabName)
 	//Primary key second
 	getline(in, tmp);
 	tab.SetPrimaryKey(tmp);
-
+	
+	//Debug things
 	cout << tab.GetTableName() << " " << tab.GetPrimaryKey() << endl;
 
 	size_t i = 0;
