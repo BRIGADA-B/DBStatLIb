@@ -3,12 +3,16 @@
 
 using namespace dbmsLib;
 int main() {
-	setlocale(LC_ALL, "Russian");	
-	DBTableTxt table;
-	string nul;
-	ReadDBTable1(table,nul);
-	table.ReadDBTable("C:\\Users\\Влад\\source\\repos\\DBStatLIb\\LibraryTxt\\Students.csv");
+	setlocale(LC_ALL, "Russian");
+	string pathToDb = "C:\\Users\\Влад\\source\\repos\\DBStatLIb\\LibraryTxt\\Students.csv";	
+	DBTableTxt table, tableTest;
+	
+	ReadDBTable1(table, pathToDb);
+
+	tableTest.ReadDBTable(pathToDb);
+
 	table.PrintTable(80);
+	tableTest.PrintTable(80);
 
 	char c;
 	cin >> c;
