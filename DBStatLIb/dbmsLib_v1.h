@@ -72,6 +72,7 @@ struct Strip{//полоса распечатки таблицы
   typedef map<string, void*> Row;
   typedef map<string, ColumnDesc> Header;
 
+void* readAnyType(string, DBType);
 void initStringDBTypeMap();
 string GetTabNameFromPath(string path);
 string ignoreBlanc(const string str);

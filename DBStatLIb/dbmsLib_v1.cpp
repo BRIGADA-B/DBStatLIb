@@ -13,6 +13,29 @@ inline void dbmsLib::initStringDBTypeMap() {
 	stringDBType["Date"] = Date;
 }
 
+void* dbmsLib::readAnyType(string val, DBType type) {
+	void* res;
+	switch (type) {
+	case Int32:
+		res = new int(stoi(val));
+		break;
+	case Double:
+		res = new double(stod(val));
+		break;
+	case String:
+		res = new string(val);
+		break;
+	case Date:
+		res = new DBDate(val);
+		break;
+	default:
+		res = NULL;
+	}
+
+	return res;
+}
+
+
 void dbmsLib::ReadDBTable1(DBTableTxt & tab, string tabName)
 {
 	ifstream in(tabName);
@@ -26,6 +49,8 @@ void dbmsLib::ReadDBTable1(DBTableTxt & tab, string tabName)
 	tab.SetFileName(tabName);
 
 	initStringDBTypeMap();
+
+	map<int, string> columnNameByIndex;
 
 	Header header;
 	Row row;
@@ -71,11 +96,22 @@ void dbmsLib::ReadDBTable1(DBTableTxt & tab, string tabName)
 				columnDesc.length = stoi(tmpElement);
 
 				header[string(columnDesc.colName)] = columnDesc;
+				columnNameByIndex[colCount] = string(columnDesc.colName);
 
 			}
 		else {
-			for()
+			for (int j = 0; j < colCount; j++) {
+				if (j - 1 != colCount)
+					getline(ss, tmpElement, '|');
+				else
+					getline(ss, tmpElement);
+
+				row[columnNameByIndex[j]] = readAnyType(tmpElement,
+					header[columnNameByIndex[j]].colType);
 			}
+
+			tab.AddRow(row, i - 2);
+		}
 	}
 
 	tab.SetHeader(header);
