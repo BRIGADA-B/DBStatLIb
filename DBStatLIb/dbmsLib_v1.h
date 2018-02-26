@@ -74,6 +74,7 @@ struct Strip{//полоса распечатки таблицы
 
 void* readAnyType(string, DBType);
 void initStringDBTypeMap();
+void initDBTypeToStringMap();
 string GetTabNameFromPath(string path);
 string ignoreBlanc(const string str);
 void* GetValue(string value, string columnName,Header hdr);
@@ -121,6 +122,7 @@ class DBTableTxt{
 		//число столбцов и ширина каждого столбца в полосе (выходной параметр)
 		void CreateTableMaket(Strip* &strips,int &nStrip,int screenWidth);
 		friend void ReadDBTable1(DBTableTxt& tab,string tabName);//tabName=path+tableName
+		friend void PrintTable1(DBTableTxt& tab, int screenWidth);
   };
 //======================== класс DBTableSet =====================
 class DBTableSet

@@ -9,10 +9,9 @@ int main() {
 
 	ReadDBTable1(table, pathToDb);
 
-	tableTest.ReadDBTable(pathToDb);
-
 	table.PrintTable(80);
-	tableTest.PrintTable(80);
+	
+	PrintTable1(table, 80);
 
 	char c;
 	cin >> c;
