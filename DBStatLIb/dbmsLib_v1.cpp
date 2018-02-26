@@ -24,7 +24,8 @@ inline void dbmsLib::initDBTypeToStringMap() {
 
 //Change to stringstream conversion
 //rename to GetValue
-void* dbmsLib::readAnyType(string val, DBType type) {
+
+void* dbmsLib::readAnyType(string val, DBType type){
 	void* res;
 	switch (type) {
 	case Int32:
@@ -51,11 +52,12 @@ void* dbmsLib::readAnyType(string val, DBType type) {
 void dbmsLib::PrintTable1(DBTableTxt& tab, int screenWidth) {
 	cout << "Таблица " << tab.GetTableName() << endl;
 
+
+
 	for (unsigned int i = 0; i < screenWidth; i++)
 		cout << "=";
 
 	Header header = tab.GetHeader();
-	vector<int> a(5);
 
 	// size_t -> int Undefined behavior!!!!!
 	for (const auto& a : header) 
@@ -67,7 +69,7 @@ void dbmsLib::PrintTable1(DBTableTxt& tab, int screenWidth) {
 		cout << setw(max(a.second.length, static_cast<int> (a.first.length())) + 2) << DBTypeToString[a.second.colType];
 
 	cout << endl;
-
+	
 	for (unsigned int i = 0; i < screenWidth; i++)
 		cout << "-";
 	for (int i = 0; i < tab.GetSize(); i++) {
@@ -89,6 +91,9 @@ void dbmsLib::PrintTable1(DBTableTxt& tab, int screenWidth) {
 		}
 		cout << endl;
 	}
+
+	for (unsigned int i = 0; i < screenWidth; i++)
+		cout << "=";
 }
 
 void dbmsLib::ReadDBTable1(DBTableTxt & tab, string tabName)

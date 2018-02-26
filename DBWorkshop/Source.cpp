@@ -9,7 +9,7 @@ int main() {
 
 	ReadDBTable1(table, pathToDb);
 
-	table.PrintTable(80);
+	table.PrintTable(29);
 	
 	PrintTable1(table, 80);
 
