@@ -72,6 +72,7 @@ void dbmsLib::PrintTable1(DBTableTxt& tab, int screenWidth) {
 	
 	for (unsigned int i = 0; i < screenWidth; i++)
 		cout << "-";
+
 	for (int i = 0; i < tab.GetSize(); i++) {
 		for (const auto& a : tab[i]) {
 			switch (header[a.first].colType) {
