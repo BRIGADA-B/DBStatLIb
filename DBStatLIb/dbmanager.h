@@ -18,29 +18,26 @@ namespace dbmanager {
 		friend ostream& operator<<(ostream& out, DBDate& date);
 		int day_, month_, year_;
 	public:
-		DBDate(string date);//формат строки: dd.mm.yyyy
+		DBDate(string date);
 		DBDate(int d, int m, int y);
-		DBDate() :day_(0), month_(0), year_(0) {};//конструктор по умолчанию
+		DBDate() :day_(0), month_(0), year_(0) {};
 		DBDate(DBDate& dat) :day_(dat.day_), month_(dat.month_), year_(dat.year_) {}
 		int GetDay();
 		int GetMonth();
 		int GetYear();
-		bool IsLeapYear(int year); //год высокосный?
-		int GetDaysInMonth(int month, int year);//Количество дней в месяце
-		int DaysInCurYear();//Количество дней от начала года до текущей даты
+		bool IsLeapYear(int year); 
+		int GetDaysInMonth(int month, int year);
+		int DaysInCurYear();
 		bool operator==(DBDate& date);
 		bool operator<(DBDate& date);
 		bool operator>(DBDate& date);
 		bool operator<= (DBDate& date);
 		bool operator>= (DBDate& date);
 		bool operator!= (DBDate& date);
-		DBDate& operator+=(int days);//Прибавляет к текущей дате days дней
-		DBDate& operator-=(int days);//Вычитает из текущей даты days дней
-		int operator-(DBDate& date);	//Количество дней между текущей датой и date
-										//Если текущая дата > date, результат < 0.
+		DBDate& operator+=(int days);
+		DBDate& operator-=(int days);
+		int operator-(DBDate& date);
 	};
-	//==================== Класс "Таблица макета СУБД" ===========================
-	//--------DBType-перечисление типов полей таблиц БД------ 
 	enum DBType {
 		NoType,
 		Int32,
@@ -49,19 +46,16 @@ namespace dbmanager {
 		Date
 	};
 	enum Condition { Undefined, Equal, NotEqual, Less, Greater, LessOrEqual, GreaterOrEqual };
-	const int LENGTH = 24;//длина имени таблицы и имени столбца.
-						  //ColumnDesc - описание данных в столбце таблицы 
-						  //данные типа string имеют одинаковую длину (length) внутри одного столбца, 
-						  //но в разных столбцах их максимальный размер может отличаться
+	const int LENGTH = 24;
+	
 	struct ColumnDesc {
-		char colName[LENGTH];//имя столбца
-		DBType colType;//тип данных в столбце таблицы
-		int length; //максимальное число символов, допустимое 
-					//для представления данных в столбце
+		char colName[LENGTH];
+		DBType colType;
+		int length; 
 	};
-	struct Strip {//полоса распечатки таблицы
-		int nField;//число полей 
-		int* fieldWidth;//ширина полей в полосе (массив)
+	struct Strip {
+		int nField;
+		int* fieldWidth;
 	};
 	typedef map<string, void*> Row;
 	typedef map<string, ColumnDesc> Header;
@@ -73,7 +67,6 @@ namespace dbmanager {
 	bool comparator(DBType type, void *obj1, Condition condition, void *obj);
 	int GetLength(ColumnDesc colDesc);
 
-	//------------------- класс DBTableTxt ----------------------
 	class DBTableTxt {
 
 		Header columnHeaders_;
@@ -106,13 +99,8 @@ namespace dbmanager {
 		Row CreateRow();
 		Row GetRow(int index);
 		void AddRow(Row row, int index);
-		//Макет распечатки таблицы:
-		//screenWidth - ширина экрана (входной параметр)
-		//nStrip - число полос в распечатке (выходной параметр)
-		//strips[nStrip] - описание полос таблицы: 
-		//число столбцов и ширина каждого столбца в полосе (выходной параметр)
 	};
-	//======================== класс DBTableSet =====================
+	
 	class DBTableSet
 	{
 	private:
@@ -130,4 +118,4 @@ namespace dbmanager {
 
 }
 
-#endif // !
+#endif
