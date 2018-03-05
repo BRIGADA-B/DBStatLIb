@@ -52,6 +52,7 @@ enum DBType {
  String,
  Date
 };
+
 enum Condition{Undefined,Equal,NotEqual,Less,Greater,LessOrEqual,GreaterOrEqual};
 const int LENGTH = 24;//длина имени таблицы и имени столбца.
 //ColumnDesc - описание данных в столбце таблицы 
@@ -67,9 +68,12 @@ struct Strip{//полоса распечатки таблицы
 	int nField;//число полей 
 	int* fieldWidth;//ширина полей в полосе (массив)
 };
+
   typedef map<string, void*> Row;
   typedef map<string, ColumnDesc> Header;
 
+void* readAnyType(string, DBType);
+void initStringDBTypeMap();
 string GetTabNameFromPath(string path);
 string ignoreBlanc(const string str);
 void* GetValue(string value, string columnName,Header hdr);
