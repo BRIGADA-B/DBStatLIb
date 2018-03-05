@@ -18,6 +18,9 @@
     <ClInclude Include="dbmsLib_v1.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="dbmanager.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="dbmsStatLib_v1.lib">
@@ -26,6 +29,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dbmsLib_v1.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="dbmanager.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

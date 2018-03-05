@@ -19,12 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dbmanager.h" />
     <ClInclude Include="dbmsLib_v1.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="dbmsStatLib_v1.lib" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="dbmanager.cpp" />
     <ClCompile Include="dbmsLib_v1.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
