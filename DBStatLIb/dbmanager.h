@@ -13,15 +13,15 @@ namespace dbmanager {
 	class DBDate
 	{
 
-		static const int arrDays[13];
+		static const int arrDays_[13];
 		friend string DateToStr(DBDate& date);
 		friend ostream& operator<<(ostream& out, DBDate& date);
-		int day, month, year;
+		int day_, month_, year_;
 	public:
 		DBDate(string date);//формат строки: dd.mm.yyyy
 		DBDate(int d, int m, int y);
-		DBDate() :day(0), month(0), year(0) {};//конструктор по умолчанию
-		DBDate(DBDate& dat) :day(dat.day), month(dat.month), year(dat.year) {}
+		DBDate() :day_(0), month_(0), year_(0) {};//конструктор по умолчанию
+		DBDate(DBDate& dat) :day_(dat.day_), month_(dat.month_), year_(dat.year_) {}
 		int GetDay();
 		int GetMonth();
 		int GetYear();
@@ -76,11 +76,11 @@ namespace dbmanager {
 	//------------------- класс DBTableTxt ----------------------
 	class DBTableTxt {
 
-		Header columnHeaders;
-		string tableName;
-		string primaryKey;
-		vector<Row> data;
-		string fileName;
+		Header columnHeaders_;
+		string tableName_;
+		string primaryKey_;
+		vector<Row> data_;
+		string fileName_;
 	public:
 		DBTableTxt() {}
 		DBTableTxt(string tabName);
@@ -100,7 +100,7 @@ namespace dbmanager {
 		void SetPrimaryKey(string key);
 		string GetFileName();
 		string GetTableName();
-		string GetPrimaryKey() { return primaryKey; }
+		string GetPrimaryKey() { return primaryKey_; }
 		Header GetHeader();
 		void SetHeader(Header& hdr);
 		Row CreateRow();
@@ -111,22 +111,20 @@ namespace dbmanager {
 		//nStrip - число полос в распечатке (выходной параметр)
 		//strips[nStrip] - описание полос таблицы: 
 		//число столбцов и ширина каждого столбца в полосе (выходной параметр)
-		void CreateTableMaket(Strip* &strips, int &nStrip, int screenWidth);
-		friend void ReadDBTable1(DBTableTxt& tab, string tabName);//tabName=path+tableName
 	};
 	//======================== класс DBTableSet =====================
 	class DBTableSet
 	{
 	private:
-		string dbName;
-		map<string, DBTableTxt*> db;
+		string dbName_;
+		map<string, DBTableTxt*> db_;
 	public:
 		DBTableSet() {};
 		DBTableSet(string name);
 		int ReadDB();
 		void PrintDB(int numcol);
 		void WriteDB();
-		string GetDBName() { return dbName; }
+		string GetDBName() { return dbName_; }
 		DBTableTxt* operator[](string tableName);
 	};
 
