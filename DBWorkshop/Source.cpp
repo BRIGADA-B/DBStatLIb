@@ -7,7 +7,7 @@ int main() {
 	DBTableTxt table;
 	string pathTo = "D:\\Ó÷åáà\\âòîğîé ñåìåñòğ\\ïğîãğàììèğîâàíèå\\repository\\Project\\LibraryTxt\\Students.csv";
 	table.ReadDBTable(pathTo);
-	table.PrintTable(120);
+	table.PrintTable(80);
 	char c;
 	cin >> c;
 	return 0;
