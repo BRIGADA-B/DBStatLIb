@@ -1,5 +1,10 @@
 
 #include "dbmanager.h"
+#include<iostream>
+#include<sstream>
+#include<iomanip>
+#include<fstream>
+#include<cassert>
 
 namespace dbmanager {
 
@@ -28,7 +33,116 @@ namespace dbmanager {
 		
 	}
 
+	string DBTableTxt::TypeName(DBType type)
+	{
+		if (type == String)
+			return "String";
+		else if (type == Double)
+			return "Double";
+		else if (type == Int32)
+			return "Int32";
+		else if (type == Date)
+			return "Date";
+		else if (type == NoType)
+			return "NoType";
+
+		return "";
+	}
+
+	DBType DBTableTxt::TypeByName(string name)
+	{
+		if (name == "String")
+			return String;
+		else if (name == "Double")
+			return Double;
+		else if (name == "Int32")
+			return Int32;
+		else if (name == "Date")
+			return Date;
+		else if (name == "NoType")
+			return NoType;
+
+	}
+
 	void DBTableTxt::ReadDBTable(string tabName){
+
+		ifstream in(tabName);
+
+		if (!in.is_open()) {
+			cout << "Ќе удалось прочитать таблицу из пути: " << tabName << endl;
+			return;
+		}
+
+		SetFileName(tabName);
+			
+		map<int, string> columnNameByIndex;
+
+		Header header;
+		Row row;
+		string tmp;
+
+		//tableName first
+		getline(in, tmp, '|');
+
+		// Table name length have to <= 24
+		assert(tmp.length() <= 24);
+		SetTableName(tmp);
+
+		//Primary key second
+		getline(in, tmp);
+		SetPrimaryKey(tmp);
+
+		cout << GetTableName() << " " << GetPrimaryKey() << endl;
+
+		size_t i = 0;
+		int colCount = 0;
+		while (getline(in, tmp) && ++i) {
+			stringstream ss(tmp);
+			string tmpElement;
+			if (i == 1)
+				for (; getline(ss, tmpElement, '|'); colCount++) {
+
+					ColumnDesc columnDesc;
+
+					// Column name length have to <= 24
+					assert(tmpElement.length() <= 24);
+
+					strcpy_s(columnDesc.colName, tmpElement.c_str());
+
+					//Column type
+					getline(ss, tmpElement, '|');
+
+
+					if (stringDBType.find(tmpElement) != stringDBType.end())
+						columnDesc.colType = stringDBType[tmpElement];
+					else
+						columnDesc.colType = NoType;
+
+					//Column  length
+
+					// Do read int instead of string
+					getline(ss, tmpElement, '|');
+					columnDesc.length = stoi(tmpElement);
+
+					header[string(columnDesc.colName)] = columnDesc;
+					columnNameByIndex[colCount] = string(columnDesc.colName);
+
+				}
+			else {
+				for (int j = 0; j < colCount; j++) {
+
+					getline(ss, tmpElement, '|');
+
+					row[columnNameByIndex[j]] = readAnyType(tmpElement,
+						header[columnNameByIndex[j]].colType);
+				}
+
+				AddRow(row, i - 2);
+			}
+		}
+
+		SetHeader(header);
+
 
 	}
 
