@@ -1,6 +1,5 @@
 
 #include "dbmanager.h"
-#include "dbmsLib_v1.h"
 
 namespace dbmanager {
 
@@ -77,7 +76,7 @@ namespace dbmanager {
 
 	void DBTableTxt::SetHeader(Header & hdr){
 		columnHeaders_.clear();
-		columnHeaders_.emplace(hdr.begin(), hdr.end());
+		columnHeaders_.insert(hdr.begin(), hdr.end());
 	}
 
 	Row DBTableTxt::GetRow(int index){

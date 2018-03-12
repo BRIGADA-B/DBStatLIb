@@ -143,7 +143,7 @@ void dbmsLib::ReadDBTable1(DBTableTxt & tab, string tabName)
 
 				// Column name length have to <= 24
 				assert(tmpElement.length() <= 24);
-				
+
 				strcpy_s(columnDesc.colName, tmpElement.c_str());
 
 				//Column type
@@ -165,7 +165,7 @@ void dbmsLib::ReadDBTable1(DBTableTxt & tab, string tabName)
 			}
 		else {
 			for (int j = 0; j < colCount; j++) {
-				
+
 				getline(ss, tmpElement, '|');
 
 				row[columnNameByIndex[j]] = readAnyType(tmpElement,

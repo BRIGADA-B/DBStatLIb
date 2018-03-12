@@ -111,14 +111,8 @@ class DBTableTxt{
 		void AddRow(Row row,int index);
 		void CreateTableMaket(Strip* &strips,int &nStrip,int screenWidth);
 		friend void ReadDBTable1(DBTableTxt& tab,string tabName);//tabName=path+tableName
-<<<<<<< HEAD
 		friend void PrintTable1(DBTableTxt& tab, int screenWidth);
   };
-//======================== класс DBTableSet =====================
-=======
-  }
-
->>>>>>> stupid comments are deleted
 class DBTableSet
 {
 private:
