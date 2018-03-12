@@ -3,11 +3,11 @@
 
 using namespace dbmanager;
 int main() {
-	setlocale(LC_ALL, "Russian");	
+	setlocale (LC_ALL, "Russian");
 	DBTableTxt table;
 	string pathTo = "D:\\Ó÷åáà\\âòîğîé ñåìåñòğ\\ïğîãğàììèğîâàíèå\\repository\\Project\\LibraryTxt\\Students.csv";
 	table.ReadDBTable(pathTo);
-	table.PrintTable(80);
+	table.PrintTable(120);
 	char c;
 	cin >> c;
 	return 0;

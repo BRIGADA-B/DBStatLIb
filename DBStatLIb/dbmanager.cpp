@@ -89,6 +89,7 @@ namespace dbmanager {
 	}
 
 
+
 	string DBTableTxt::ValueToString(void* value, string columnName)
 	{
 		Header header = GetHeader();
@@ -113,7 +114,7 @@ namespace dbmanager {
 		ifstream in(tabName);
 
 		if (!in.is_open()) {
-			cout << "Не удалось прочитать таблицу из пути: " << tabName << endl;
+			cout << "файл не может быть открыт: " << tabName << endl;
 			return;
 		}
 
@@ -127,7 +128,6 @@ namespace dbmanager {
 
 		//tableName first
 		getline(in, tmp, '|');
-
 		// Table name length have to <= 24
 		assert(tmp.length() <= 24);
 		SetTableName(tmp);
@@ -135,8 +135,6 @@ namespace dbmanager {
 		//Primary key second
 		getline(in, tmp);
 		SetPrimaryKey(tmp);
-
-		cout << GetTableName() << " " << GetPrimaryKey() << endl;
 
 		size_t i = 0;
 		int colCount = 0;
@@ -178,8 +176,8 @@ namespace dbmanager {
 						header[columnNameByIndex[j]].colType);
 					
 					if (!row[columnNameByIndex[j]]) {
-						cout << "Не удалось считать данные из колонки: " << columnNameByIndex[j]
-							<< "В строке: " << i - 1;
+						cout << "1: " << columnNameByIndex[j]
+							<< "1: " << i - 1;
 					}
 				}
 
@@ -192,39 +190,92 @@ namespace dbmanager {
 
 	}
 
-	void DBTableTxt::PrintTable(int screenWidth){
-		cout << "Таблица " << GetTableName() << endl;
+	
 
+	void DBTableTxt::CreateMaket (map <int, int> &strip, int screenWidth){
+		Header hdr=GetHeader();
 
+		int count=0, wide=0, k=1;
 
-		for ( int i = 0; i < screenWidth; i++)
-			cout << "=";
-
-		Header header = GetHeader();
-
-		// size_t -> int Undefined behavior!!!!!
-		for (const auto& a : header)
-			cout << setw(max(a.second.length, static_cast<int> (a.first.length())) + 2) << a.first;
-
-		cout << endl;
-
-		for (const auto& a : header)
-			cout << setw(max(a.second.length, static_cast<int> (a.first.length())) + 2) << TypeName(a.second.colType);
-
-		cout << endl;
-
-		for ( int i = 0; i < screenWidth; i++)
-			cout << "-";
-
-		for (int i = 0; i < GetSize(); i++) {
-			for (const auto& a : data_[i]) {
-				cout << setw(max(header[a.first].length, static_cast<int>(a.first.length())) + 2) << ValueToString(a.second, a.first);
+		for (const auto& a : hdr){
+			wide+=a.second.length;
+			if (wide>screenWidth){
+				strip[k]=count;
+				k++;
+				count=0;
+				wide=a.second.length;
 			}
-			cout << endl;
+			count++;
 		}
 
+		strip[k]=count;
+
+		/*for (const auto& a : strip)
+			cout <<a.first<<' '<<a.second<<endl;*/
+
+	}
+
+	void DBTableTxt::PrintTable(int screenWidth){
+		Header header = GetHeader();
+
+		for (const auto& a : header) //проверка на возможность вывода таблицы
+			if (a.second.length>screenWidth){
+				cout <<"Ширина столбца превышает ширину экрана"<<endl;
+				return;
+			}
+
+		cout << "Таблица " << GetTableName() << endl;
+
 		for ( int i = 0; i < screenWidth; i++)
 			cout << "=";
+		cout <<endl;
+
+		map <int,int> strip;
+		CreateMaket (strip, screenWidth);
+
+		auto iterHeaderMain = header.begin ();
+		auto iterHeader = iterHeaderMain;
+		int iterData=0;
+
+		for (int i=1; i<=strip.size(); i++){
+			//ВЫВОД ШАПКИ СТОЛБЦА
+			iterHeader=iterHeaderMain;
+
+			for (int count=0; count<strip[i]; count++){ //вывод имени столбца
+				cout <<setw (iterHeader->second.length+1)<<iterHeader->second.colName;
+				iterHeader++;			
+			}
+			cout <<endl;
+
+			iterHeader=iterHeaderMain;
+
+			for (int count=0; count<strip[i]; count++){ //вывод типа данных в столбце
+				cout <<setw (iterHeader->second.length+1)<<TypeName (iterHeader->second.colType);
+				iterHeader++;			
+			}
+			cout <<endl;
+
+			iterHeader=iterHeaderMain;
+
+			for (int count=0; count<strip[i]; count++)
+				iterHeaderMain++;
+
+			//ВЫВОД ДАННЫХ СТОЛБЦОВ
+
+			for (int z=0; z<GetSize(); z++){
+				auto iter=data_[z].begin();
+				for (int k=0; k<iterData; k++)
+					iter++;
+				for (int count=0; count<strip[i]; count++){
+					cout << setw(max(header[iter->first].length, static_cast<int>(iter->first.length())) +1) << ValueToString (iter->second,iter->first);
+					iter++;
+				}
+				cout <<endl;
+			}
+			iterData+=strip[i];	
+			cout <<endl;
+		}
+
 	}
 
 	void DBTableTxt::WriteDBTable(string tabName){
