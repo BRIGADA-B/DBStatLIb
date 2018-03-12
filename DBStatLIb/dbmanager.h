@@ -63,6 +63,7 @@ namespace dbmanager {
 
 	string GetTabNameFromPath(string path);
 	string ignoreBlanc(const string str);
+
 	void* GetValue(string value, string columnName, Header hdr);
 	void* SetValue(string value, string columnName, Header hdr);
 	bool comparator(DBType type, void *obj1, Condition condition, void *obj);
@@ -79,7 +80,9 @@ namespace dbmanager {
 		DBTableTxt() {}
 		DBTableTxt(string tabName);
 		DBTableTxt(string tabName, Header hdr, string primKey);
-		const char* TypeName(DBType type);
+		string TypeName(DBType type);
+		DBType TypeByName(string name);
+		void* readAnyType(string val, DBType type);
 		~DBTableTxt() {}
 		vector<int> IndexOfRecord(void* keyValue, string keyColumnName);
 		string valueToString(Row& row, string columnName);

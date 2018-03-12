@@ -5,8 +5,10 @@ using namespace dbmanager;
 int main() {
 	setlocale(LC_ALL, "Russian");	
 	DBTableTxt table;
-	string nul;
-	//added line for example
+	string pathTo = "C:\\Users\\Âëàä\\source\\repos\\DBStatLIb\\LibraryTxt\\Students.csv";
+	
+	table.ReadDBTable(pathTo);
+	table.PrintTable(80);
 	char c;
 	cin >> c;
 	return 0;
