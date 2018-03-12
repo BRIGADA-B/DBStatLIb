@@ -3,6 +3,8 @@
 #include <cassert>
 #include "dbmsLib_v1.h"
 
+//Chubasik was here 123
+
 // Need to consider. Where to store this map.
 map<string, dbmsLib::DBType> stringDBType;
 
