@@ -15,7 +15,6 @@ namespace dbmanager {
 		
 	}
 
-<<<<<<< HEAD
 	void DBTableTxt::ReadDBTable(string tabName){
 
 	}
@@ -26,50 +25,55 @@ namespace dbmanager {
 	void DBTableTxt::WriteDBTable(string tabName){
 	}
 
-=======
 	int DBTableTxt::GetSize()
 	{
-		return 0;
+		return data_.size();
 	}
 
 	DBType DBTableTxt::GetType(char * columnName)
 	{
-		return DBType();
+		return columnHeaders_[columnName].colType;
 	}
 
 	void DBTableTxt::SetFileName(string path){
+		fileName_ = path;
 	}
 
 	void DBTableTxt::SetTableName(string tName){
+		tableName_ = tName;
 	}
 
 	void DBTableTxt::SetPrimaryKey(string key){
+		primaryKey_ = key;
 	}
 
 	string DBTableTxt::GetFileName(){
-		return string();
+		return fileName_;
 	}
 
 	string DBTableTxt::GetTableName(){
-		return string();
+		return tableName_;
 	}
 
 	Header DBTableTxt::GetHeader()
 	{
-		return Header();
+		return columnHeaders_;
 	}
 
 	void DBTableTxt::SetHeader(Header & hdr){
-	
+		columnHeaders_.clear();
+		columnHeaders_.emplace(hdr.begin(), hdr.end());
 	}
 
 	Row DBTableTxt::GetRow(int index){
-		return Row();
+		return data_[index];
 	}
 
+	void DBTableTxt::AddRow(Row row, int index) {
+		data_.emplace(data_.begin() + index, row);
 
+	}
 
->>>>>>> Добавил пустышки для set и get
 // <----------------------------------------- DBTableSet class ---------------------------------->
 	DBTableSet::DBTableSet(string name) {
 
