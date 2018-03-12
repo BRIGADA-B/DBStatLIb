@@ -3,7 +3,6 @@
 
 using namespace dbmanager;
 int main() {
-
 	setlocale(LC_ALL, "Russian");	
 	DBTableTxt table;
 	string nul;
