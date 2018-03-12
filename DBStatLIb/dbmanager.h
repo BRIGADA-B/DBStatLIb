@@ -85,7 +85,7 @@ namespace dbmanager {
 		void* readAnyType(string val, DBType type);
 		~DBTableTxt() {}
 		vector<int> IndexOfRecord(void* keyValue, string keyColumnName);
-		string valueToString(Row& row, string columnName);
+		string ValueToString(void* value, string columnName);
 		void ReadDBTable(string tabName);//tabName=path+tableName
 		void PrintTable(int screenWidth);
 		void WriteDBTable(string tabName);//tabName=path+tableName	
