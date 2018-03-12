@@ -9,6 +9,21 @@ namespace dbmanager {
 
 	}
 
+	int DBDate::GetDay()
+	{
+		return day_;
+	}
+
+	int DBDate::GetMonth()
+	{
+		return month_;
+	}
+
+	int DBDate::GetYear()
+	{
+		return year_;
+	}
+
 
 // <----------------------------------------- DBTableTxt class ---------------------------------->
 	DBTableTxt::DBTableTxt(string tableName) {
@@ -77,5 +92,9 @@ namespace dbmanager {
 // <----------------------------------------- DBTableSet class ---------------------------------->
 	DBTableSet::DBTableSet(string name) {
 
+	}
+	DBTableTxt * DBTableSet::operator[](string tableName)
+	{
+		return db_[tableName];
 	}
 }
