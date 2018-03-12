@@ -62,7 +62,32 @@ namespace dbmanager {
 		else if (name == "NoType")
 			return NoType;
 
+		return DBType();
 	}
+
+	void * DBTableTxt::readAnyType(string val, DBType type)
+	{
+		void* res = NULL;
+		switch (type) {
+		case Int32:
+			res = new int(stoi(val));
+			break;
+		case Double:
+			res = new double(stod(val));
+			break;
+		case String:
+			res = new string(val);
+			break;
+		case Date:
+			res = new DBDate(val);
+			break;
+		case NoType:
+			res = new bool(stoi(val));  // Undefiden behavior
+		}
+
+		return res;
+	}
+
 
 	void DBTableTxt::ReadDBTable(string tabName){
 
@@ -113,10 +138,7 @@ namespace dbmanager {
 					getline(ss, tmpElement, '|');
 
 
-					if (stringDBType.find(tmpElement) != stringDBType.end())
-						columnDesc.colType = stringDBType[tmpElement];
-					else
-						columnDesc.colType = NoType;
+					columnDesc.colType = TypeByName(tmpElement);
 
 					//Column  length
 
@@ -135,6 +157,11 @@ namespace dbmanager {
 
 					row[columnNameByIndex[j]] = readAnyType(tmpElement,
 						header[columnNameByIndex[j]].colType);
+					
+					if (!row[columnNameByIndex[j]]) {
+						cout << "Не удалось считать данные из колонки: " << columnNameByIndex[j]
+							<< "В строке: " << i - 1;
+					}
 				}
 
 				AddRow(row, i - 2);
@@ -147,6 +174,51 @@ namespace dbmanager {
 	}
 
 	void DBTableTxt::PrintTable(int screenWidth){
+		cout << "Таблица " << GetTableName() << endl;
+
+
+
+		for ( int i = 0; i < screenWidth; i++)
+			cout << "=";
+
+		Header header = GetHeader();
+
+		// size_t -> int Undefined behavior!!!!!
+		for (const auto& a : header)
+			cout << setw(max(a.second.length, static_cast<int> (a.first.length())) + 2) << a.first;
+
+		cout << endl;
+
+		for (const auto& a : header)
+			cout << setw(max(a.second.length, static_cast<int> (a.first.length())) + 2) << TypeName(a.second.colType);
+
+		cout << endl;
+
+		for ( int i = 0; i < screenWidth; i++)
+			cout << "-";
+
+		for (int i = 0; i < GetSize(); i++) {
+			for (const auto& a : data_[i]) {
+				switch (header[a.first].colType) {
+				case Int32:
+					cout << setw(max(header[a.first].length, static_cast<int>(a.first.length())) + 2) << *static_cast<int*>(a.second);
+					break;
+				case String:
+					cout << setw(max(header[a.first].length, static_cast<int>(a.first.length())) + 2) << *static_cast<string*>(a.second);
+					break;
+				case Double:
+					cout << setw(max(header[a.first].length, static_cast<int>(a.first.length())) + 2) << *static_cast<double*>(a.second);
+					break;
+				case Date:
+					//cout << setw(max(header[a.first].length, static_cast<int>(a.first.length())) + 2) << *static_cast<DBDate*>(a.second);
+					break;
+				}
+			}
+			cout << endl;
+		}
+
+		for ( int i = 0; i < screenWidth; i++)
+			cout << "=";
 	}
 
 	void DBTableTxt::WriteDBTable(string tabName){
