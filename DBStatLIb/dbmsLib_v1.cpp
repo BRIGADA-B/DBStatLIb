@@ -5,6 +5,7 @@
 
 // Need to consider. Where to store this map.
 map<string, dbmsLib::DBType> stringDBType;
+map<dbmsLib::DBType, string> DBTypeToString;
 
 inline void dbmsLib::initStringDBTypeMap() {
 	stringDBType["Int32"] = Int32;
@@ -13,7 +14,18 @@ inline void dbmsLib::initStringDBTypeMap() {
 	stringDBType["Date"] = Date;
 }
 
-void* dbmsLib::readAnyType(string val, DBType type) {
+inline void dbmsLib::initDBTypeToStringMap() {
+	DBTypeToString[Int32] = "Int32";
+	DBTypeToString[Double] = "Double";
+	DBTypeToString[String] = "String";
+	DBTypeToString[Date] = "Date";
+}
+
+
+//Change to stringstream conversion
+//rename to GetValue
+
+void* dbmsLib::readAnyType(string val, DBType type){
 	void* res;
 	switch (type) {
 	case Int32:
@@ -35,6 +47,55 @@ void* dbmsLib::readAnyType(string val, DBType type) {
 	return res;
 }
 
+//------------------------- DBTableText --------------------------------------
+
+void dbmsLib::PrintTable1(DBTableTxt& tab, int screenWidth) {
+	cout << "Таблица " << tab.GetTableName() << endl;
+
+
+
+	for (unsigned int i = 0; i < screenWidth; i++)
+		cout << "=";
+
+	Header header = tab.GetHeader();
+
+	// size_t -> int Undefined behavior!!!!!
+	for (const auto& a : header) 
+		cout << setw(max(a.second.length, static_cast<int> (a.first.length())) + 2) << a.first;
+	
+	cout << endl;
+
+	for(const auto& a : header)
+		cout << setw(max(a.second.length, static_cast<int> (a.first.length())) + 2) << DBTypeToString[a.second.colType];
+
+	cout << endl;
+	
+	for (unsigned int i = 0; i < screenWidth; i++)
+		cout << "-";
+
+	for (int i = 0; i < tab.GetSize(); i++) {
+		for (const auto& a : tab[i]) {
+			switch (header[a.first].colType) {
+			case Int32:
+				cout << setw(max(header[a.first].length, static_cast<int>(a.first.length())) + 2)  << *static_cast<int*>(a.second);
+				break;
+			case String:
+				cout << setw(max(header[a.first].length, static_cast<int>(a.first.length())) + 2) << *static_cast<string*>(a.second);
+				break;
+			case Double:
+				cout << setw(max(header[a.first].length, static_cast<int>(a.first.length())) + 2) << *static_cast<double*>(a.second);
+				break;
+			case Date:
+				cout << setw(max(header[a.first].length, static_cast<int>(a.first.length())) + 2) << *static_cast<DBDate*>(a.second);
+				break;
+			}	
+		}
+		cout << endl;
+	}
+
+	for (unsigned int i = 0; i < screenWidth; i++)
+		cout << "=";
+}
 
 void dbmsLib::ReadDBTable1(DBTableTxt & tab, string tabName)
 {
@@ -49,6 +110,7 @@ void dbmsLib::ReadDBTable1(DBTableTxt & tab, string tabName)
 	tab.SetFileName(tabName);
 
 	initStringDBTypeMap();
+	initDBTypeToStringMap();
 
 	map<int, string> columnNameByIndex;
 
@@ -81,6 +143,7 @@ void dbmsLib::ReadDBTable1(DBTableTxt & tab, string tabName)
 
 				// Column name length have to <= 24
 				assert(tmpElement.length() <= 24);
+
 				strcpy_s(columnDesc.colName, tmpElement.c_str());
 
 				//Column type
@@ -92,6 +155,7 @@ void dbmsLib::ReadDBTable1(DBTableTxt & tab, string tabName)
 
 				//Column  length
 
+				// Do read int instead of string
 				getline(ss, tmpElement, '|');
 				columnDesc.length = stoi(tmpElement);
 
@@ -101,10 +165,8 @@ void dbmsLib::ReadDBTable1(DBTableTxt & tab, string tabName)
 			}
 		else {
 			for (int j = 0; j < colCount; j++) {
-				if (j - 1 != colCount)
-					getline(ss, tmpElement, '|');
-				else
-					getline(ss, tmpElement);
+
+				getline(ss, tmpElement, '|');
 
 				row[columnNameByIndex[j]] = readAnyType(tmpElement,
 					header[columnNameByIndex[j]].colType);
@@ -119,3 +181,5 @@ void dbmsLib::ReadDBTable1(DBTableTxt & tab, string tabName)
 
 	std::cout << __FUNCTION__ << std::endl;
 }
+
+

@@ -1,4 +1,3 @@
-//файл dbmsLib.h
 #pragma once
 #ifndef _dbmsLib_
 #define _dbmsLib_
@@ -13,8 +12,8 @@
 using namespace std;
 namespace dbmsLib
 {
-//-----------------класс DBDate----------------------------
-  class DBDate
+
+	class DBDate
   {	
 	  
 		static const int arrDays[13];
@@ -22,29 +21,27 @@ namespace dbmsLib
 		friend ostream& operator<<(ostream& out,DBDate& date);
 		int day, month, year;
 	public:
-		DBDate(string date);//формат строки: dd.mm.yyyy
+		DBDate(string date);
 		DBDate(int d,int m,int y);
-		DBDate():day(0),month(0),year(0){};//конструктор по умолчанию
+		DBDate():day(0),month(0),year(0){};
 		DBDate(DBDate& dat):day(dat.day),month(dat.month),year(dat.year){}
 		int GetDay();
 		int GetMonth();
 		int GetYear();
-		bool IsLeapYear (int year); //год высокосный?
-		int GetDaysInMonth(int month,int year);//Количество дней в месяце
-		int DaysInCurYear();//Количество дней от начала года до текущей даты
+		bool IsLeapYear (int year);
+		int GetDaysInMonth(int month,int year);
+		int DaysInCurYear();
 		bool operator==(DBDate& date);
 		bool operator<(DBDate& date); 
 		bool operator>(DBDate& date);
 		bool operator<= (DBDate& date);
 		bool operator>= (DBDate& date);
 		bool operator!= (DBDate& date);
-		DBDate& operator+=(int days);//Прибавляет к текущей дате days дней
-		DBDate& operator-=(int days);//Вычитает из текущей даты days дней
-		int operator-(DBDate& date);	//Количество дней между текущей датой и date
-									//Если текущая дата > date, результат < 0.
+		DBDate& operator+=(int days);
+		DBDate& operator-=(int days);
+		int operator-(DBDate& date);
   };
-//==================== Класс "Таблица макета СУБД" ===========================
-//--------DBType-перечисление типов полей таблиц БД------ 
+
 enum DBType {
  NoType,
  Int32,
@@ -54,19 +51,16 @@ enum DBType {
 };
 
 enum Condition{Undefined,Equal,NotEqual,Less,Greater,LessOrEqual,GreaterOrEqual};
-const int LENGTH = 24;//длина имени таблицы и имени столбца.
-//ColumnDesc - описание данных в столбце таблицы 
-//данные типа string имеют одинаковую длину (length) внутри одного столбца, 
-//но в разных столбцах их максимальный размер может отличаться
+const int LENGTH = 24;
+
 struct ColumnDesc { 
-	char colName[LENGTH];//имя столбца
-	DBType colType;//тип данных в столбце таблицы
-	int length; //максимальное число символов, допустимое 
-	//для представления данных в столбце
+	char colName[LENGTH];
+	DBType colType;
+	int length;
 }; 
-struct Strip{//полоса распечатки таблицы
-	int nField;//число полей 
-	int* fieldWidth;//ширина полей в полосе (массив)
+struct Strip{
+	int nField;
+	int* fieldWidth;
 };
 
   typedef map<string, void*> Row;
@@ -74,6 +68,7 @@ struct Strip{//полоса распечатки таблицы
 
 void* readAnyType(string, DBType);
 void initStringDBTypeMap();
+void initDBTypeToStringMap();
 string GetTabNameFromPath(string path);
 string ignoreBlanc(const string str);
 void* GetValue(string value, string columnName,Header hdr);
@@ -81,7 +76,7 @@ void* SetValue(string value, string columnName,Header hdr);
 bool comparator(DBType type,void *obj1,Condition condition,void *obj);
 int GetLength(ColumnDesc colDesc);
 
-//------------------- класс DBTableTxt ----------------------
+
 class DBTableTxt{
 	
 		Header columnHeaders;
@@ -114,15 +109,10 @@ class DBTableTxt{
 		Row CreateRow();
 		Row GetRow(int index);
 		void AddRow(Row row,int index);
-		//Макет распечатки таблицы:
-		//screenWidth - ширина экрана (входной параметр)
-		//nStrip - число полос в распечатке (выходной параметр)
-		//strips[nStrip] - описание полос таблицы: 
-		//число столбцов и ширина каждого столбца в полосе (выходной параметр)
 		void CreateTableMaket(Strip* &strips,int &nStrip,int screenWidth);
 		friend void ReadDBTable1(DBTableTxt& tab,string tabName);//tabName=path+tableName
+		friend void PrintTable1(DBTableTxt& tab, int screenWidth);
   };
-//======================== класс DBTableSet =====================
 class DBTableSet
 {
 private:
@@ -139,4 +129,4 @@ public:
 };
 
 }
-#endif //конец _dbmsLib_
+#endif
