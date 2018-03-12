@@ -23,7 +23,6 @@ namespace dbmanager {
 		return year_;
 	}
 
-
 // <----------------------------------------- DBTableTxt class ---------------------------------->
 	DBTableTxt::DBTableTxt(string tableName) {
 		
@@ -87,7 +86,6 @@ namespace dbmanager {
 		data_.emplace(data_.begin() + index, row);
 
 	}
-
 // <----------------------------------------- DBTableSet class ---------------------------------->
 	DBTableSet::DBTableSet(string name) {
 
@@ -96,4 +94,5 @@ namespace dbmanager {
 	{
 		return db_[tableName];
 	}
+
 }

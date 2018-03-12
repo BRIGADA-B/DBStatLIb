@@ -38,6 +38,7 @@ namespace dbmanager {
 		DBDate& operator-=(int days);
 		int operator-(DBDate& date);
 	};
+  
 	enum DBType {
 		NoType,
 		Int32,
@@ -119,3 +120,5 @@ namespace dbmanager {
 }
 
 #endif
+
+
