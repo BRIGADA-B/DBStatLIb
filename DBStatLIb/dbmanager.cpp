@@ -89,6 +89,25 @@ namespace dbmanager {
 	}
 
 
+	string DBTableTxt::ValueToString(void* value, string columnName)
+	{
+		Header header = GetHeader();
+		switch (header[columnName].colType) {
+		case String:
+			return *static_cast<string*>(value);
+		case Int32:
+			return to_string(*static_cast<int*>(value)); // TODO: Add check for errors
+		case Double:
+			return to_string(*static_cast<double*>(value));
+		case Date:
+			return "Data"; // TODO: add cast from DBDate -> string
+		case NoType:
+			return "NoType"; // NoType ????????/
+		default:
+			return "ERROR";
+		}
+	}
+
 	void DBTableTxt::ReadDBTable(string tabName){
 
 		ifstream in(tabName);
@@ -199,20 +218,7 @@ namespace dbmanager {
 
 		for (int i = 0; i < GetSize(); i++) {
 			for (const auto& a : data_[i]) {
-				switch (header[a.first].colType) {
-				case Int32:
-					cout << setw(max(header[a.first].length, static_cast<int>(a.first.length())) + 2) << *static_cast<int*>(a.second);
-					break;
-				case String:
-					cout << setw(max(header[a.first].length, static_cast<int>(a.first.length())) + 2) << *static_cast<string*>(a.second);
-					break;
-				case Double:
-					cout << setw(max(header[a.first].length, static_cast<int>(a.first.length())) + 2) << *static_cast<double*>(a.second);
-					break;
-				case Date:
-					//cout << setw(max(header[a.first].length, static_cast<int>(a.first.length())) + 2) << *static_cast<DBDate*>(a.second);
-					break;
-				}
+				cout << setw(max(header[a.first].length, static_cast<int>(a.first.length())) + 2) << ValueToString(a.second, a.first);
 			}
 			cout << endl;
 		}
@@ -222,6 +228,28 @@ namespace dbmanager {
 	}
 
 	void DBTableTxt::WriteDBTable(string tabName){
+		ofstream out(tabName);
+
+		if (!out.is_open()) {
+			cout << "Cannot open file: " << tabName << " for reading\n";
+			return;
+		}
+
+		out << GetTableName() << "|" << GetPrimaryKey() << endl;
+
+		Header header = GetHeader();
+
+		size_t i = 0;
+		for (const auto& a : header) 
+			cout << a.second.colName << "|" << TypeName(a.second.colType) << "|" 
+				 << a.second.length << (i++ < header.size() - 1 ? "|":"\n");
+
+		for (const auto& row : data_) {
+			i = 0;
+			for (const auto& a : row)
+				cout << ValueToString(a.second, a.first) << (i++ < row.size() - 1 ? "|":"\n");
+		}
+		
 	}
 
 	int DBTableTxt::GetSize()
