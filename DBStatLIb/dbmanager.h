@@ -100,6 +100,7 @@ namespace dbmanager {
 		string GetPrimaryKey() { return primaryKey_; }
 		Header GetHeader();
 		void SetHeader(Header& hdr);
+		void CreateMaket (map <int, int> &strip, int screenWidth);
 		Row CreateRow();
 		Row GetRow(int index);
 		void AddRow(Row row, int index);
