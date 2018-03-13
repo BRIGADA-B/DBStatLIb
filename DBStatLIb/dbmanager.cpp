@@ -114,7 +114,7 @@ namespace dbmanager {
 		ifstream in(tabName);
 
 		if (!in.is_open()) {
-			cout << "файл не может быть открыт: " << tabName << endl;
+			cout << "File cannot be opened: " << tabName << endl;
 			return;
 		}
 
@@ -187,10 +187,7 @@ namespace dbmanager {
 
 		SetHeader(header);
 
-
 	}
-
-	
 
 	void DBTableTxt::CreateMaket (map <int, int> &strip, int screenWidth){
 		Header hdr=GetHeader();
@@ -210,21 +207,18 @@ namespace dbmanager {
 
 		strip[k]=count;
 
-		/*for (const auto& a : strip)
-			cout <<a.first<<' '<<a.second<<endl;*/
-
 	}
 
 	void DBTableTxt::PrintTable(int screenWidth){
 		Header header = GetHeader();
 
-		for (const auto& a : header) //проверка на возможность вывода таблицы
+		for (const auto& a : header) //check for possibility of print table
 			if (a.second.length>screenWidth){
-				cout <<"Ширина столбца превышает ширину экрана"<<endl;
+				cout <<"Column width is too big"<<endl;
 				return;
 			}
 
-		cout << "Таблица " << GetTableName() << endl;
+		cout << "Table " << GetTableName() << endl;
 
 		for ( int i = 0; i < screenWidth; i++)
 			cout << "=";
@@ -238,10 +232,10 @@ namespace dbmanager {
 		int iterData=0;
 
 		for (int i=1; i<=strip.size(); i++){
-			//ВЫВОД ШАПКИ СТОЛБЦА
+			//PRINT COLUMN HEADER
 			iterHeader=iterHeaderMain;
 
-			for (int count=0; count<strip[i]; count++){ //вывод имени столбца
+			for (int count=0; count<strip[i]; count++){ //print column name
 				cout <<setw (iterHeader->second.length+1)<<iterHeader->second.colName;
 				iterHeader++;			
 			}
@@ -249,7 +243,7 @@ namespace dbmanager {
 
 			iterHeader=iterHeaderMain;
 
-			for (int count=0; count<strip[i]; count++){ //вывод типа данных в столбце
+			for (int count=0; count<strip[i]; count++){ //print data type of column 
 				cout <<setw (iterHeader->second.length+1)<<TypeName (iterHeader->second.colType);
 				iterHeader++;			
 			}
@@ -260,7 +254,7 @@ namespace dbmanager {
 			for (int count=0; count<strip[i]; count++)
 				iterHeaderMain++;
 
-			//ВЫВОД ДАННЫХ СТОЛБЦОВ
+			//PRINT DATA OF COLUMN
 
 			for (int z=0; z<GetSize(); z++){
 				auto iter=data_[z].begin();
