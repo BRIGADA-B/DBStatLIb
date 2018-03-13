@@ -176,8 +176,8 @@ namespace dbmanager {
 						header[columnNameByIndex[j]].colType);
 					
 					if (!row[columnNameByIndex[j]]) {
-						cout << "1: " << columnNameByIndex[j]
-							<< "1: " << i - 1;
+						cout << "cannot read column data: " << columnNameByIndex[j]
+							<< "line: " << i - 1;
 					}
 				}
 
