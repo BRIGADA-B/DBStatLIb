@@ -1,0 +1,357 @@
+
+#include "dbmanager.h"
+#include<iostream>
+#include<sstream>
+#include<iomanip>
+#include<fstream>
+#include<cassert>
+
+namespace dbmanager {
+
+// <----------------------------------------- DBDate class ---------------------------------->
+	DBDate::DBDate(string date) {
+
+	}
+
+	int DBDate::GetDay()
+	{
+		return day_;
+	}
+
+	int DBDate::GetMonth()
+	{
+		return month_;
+	}
+
+	int DBDate::GetYear()
+	{
+		return year_;
+	}
+
+// <----------------------------------------- DBTableTxt class ---------------------------------->
+	DBTableTxt::DBTableTxt(string tableName) {
+		
+	}
+
+	string DBTableTxt::TypeName(DBType type)
+	{
+		if (type == String)
+			return "String";
+		else if (type == Double)
+			return "Double";
+		else if (type == Int32)
+			return "Int32";
+		else if (type == Date)
+			return "Date";
+		else if (type == NoType)
+			return "NoType";
+
+		return "";
+	}
+
+	DBType DBTableTxt::TypeByName(string name)
+	{
+		if (name == "String")
+			return String;
+		else if (name == "Double")
+			return Double;
+		else if (name == "Int32")
+			return Int32;
+		else if (name == "Date")
+			return Date;
+		else if (name == "NoType")
+			return NoType;
+
+		return DBType();
+	}
+
+	void * DBTableTxt::readAnyType(string val, DBType type)
+	{
+		void* res = NULL;
+		switch (type) {
+		case Int32:
+			res = new int(stoi(val));
+			break;
+		case Double:
+			res = new double(stod(val));
+			break;
+		case String:
+			res = new string(val);
+			break;
+		case Date:
+			res = new DBDate(val);
+			break;
+		case NoType:
+			res = new bool(stoi(val));  // Undefiden behavior
+		}
+
+		return res;
+	}
+
+
+
+	string DBTableTxt::ValueToString(void* value, string columnName)
+	{
+		Header header = GetHeader();
+		switch (header[columnName].colType) {
+		case String:
+			return *static_cast<string*>(value);
+		case Int32:
+			return to_string(*static_cast<int*>(value)); // TODO: Add check for errors
+		case Double:
+			return to_string(*static_cast<double*>(value));
+		case Date:
+			return "Data"; // TODO: add cast from DBDate -> string
+		case NoType:
+			return "NoType"; // NoType ????????/
+		default:
+			return "ERROR";
+		}
+	}
+
+	void DBTableTxt::ReadDBTable(string tabName){
+
+		ifstream in(tabName);
+
+		if (!in.is_open()) {
+			cout << "File cannot be opened: " << tabName << endl;
+			return;
+		}
+
+		SetFileName(tabName);
+			
+		map<int, string> columnNameByIndex;
+
+		Header header;
+		Row row;
+		string tmp;
+
+		//tableName first
+		getline(in, tmp, '|');
+		// Table name length have to <= 24
+		assert(tmp.length() <= 24);
+		SetTableName(tmp);
+
+		//Primary key second
+		getline(in, tmp);
+		SetPrimaryKey(tmp);
+
+		size_t i = 0;
+		int colCount = 0;
+		while (getline(in, tmp) && ++i) {
+			stringstream ss(tmp);
+			string tmpElement;
+			if (i == 1)
+				for (; getline(ss, tmpElement, '|'); colCount++) {
+
+					ColumnDesc columnDesc;
+
+					// Column name length have to <= 24
+					assert(tmpElement.length() <= 24);
+
+					strcpy_s(columnDesc.colName, tmpElement.c_str());
+
+					//Column type
+					getline(ss, tmpElement, '|');
+
+
+					columnDesc.colType = TypeByName(tmpElement);
+
+					//Column  length
+
+					// Do read int instead of string
+					getline(ss, tmpElement, '|');
+					columnDesc.length = stoi(tmpElement);
+
+					header[string(columnDesc.colName)] = columnDesc;
+					columnNameByIndex[colCount] = string(columnDesc.colName);
+
+				}
+			else {
+				for (int j = 0; j < colCount; j++) {
+
+					getline(ss, tmpElement, '|');
+
+					row[columnNameByIndex[j]] = readAnyType(tmpElement,
+						header[columnNameByIndex[j]].colType);
+					
+					if (!row[columnNameByIndex[j]]) {
+						cout << "cannot read column data: " << columnNameByIndex[j]
+							<< "line: " << i - 1;
+					}
+				}
+
+				AddRow(row, i - 2);
+			}
+		}
+
+		SetHeader(header);
+
+	}
+
+	void DBTableTxt::CreateMaket (map <int, int> &strip, int screenWidth){
+		Header hdr=GetHeader();
+
+		int count=0, wide=0, k=1;
+
+		for (const auto& a : hdr){
+			wide+=a.second.length;
+			if (wide>screenWidth){
+				strip[k]=count;
+				k++;
+				count=0;
+				wide=a.second.length;
+			}
+			count++;
+		}
+
+		strip[k]=count;
+
+	}
+
+	void DBTableTxt::PrintTable(int screenWidth){
+		Header header = GetHeader();
+
+		for (const auto& a : header) //check for possibility of print table
+			if (a.second.length>screenWidth){
+				cout <<"Column width is too big"<<endl;
+				return;
+			}
+
+		cout << "Table " << GetTableName() << endl;
+
+		for ( int i = 0; i < screenWidth; i++)
+			cout << "=";
+		cout <<endl;
+
+		map <int,int> strip;
+		CreateMaket (strip, screenWidth);
+
+		auto iterHeaderMain = header.begin ();
+		auto iterHeader = iterHeaderMain;
+		int iterData=0;
+
+		for (int i=1; i<=strip.size(); i++){
+			//PRINT COLUMN HEADER
+			iterHeader=iterHeaderMain;
+
+			for (int count=0; count<strip[i]; count++){ //print column name
+				cout <<setw (iterHeader->second.length+1)<<iterHeader->second.colName;
+				iterHeader++;			
+			}
+			cout <<endl;
+
+			iterHeader=iterHeaderMain;
+
+			for (int count=0; count<strip[i]; count++){ //print data type of column 
+				cout <<setw (iterHeader->second.length+1)<<TypeName (iterHeader->second.colType);
+				iterHeader++;			
+			}
+			cout <<endl;
+
+			iterHeader=iterHeaderMain;
+
+			for (int count=0; count<strip[i]; count++)
+				iterHeaderMain++;
+
+			//PRINT DATA OF COLUMN
+
+			for (int z=0; z<GetSize(); z++){
+				auto iter=data_[z].begin();
+				for (int k=0; k<iterData; k++)
+					iter++;
+				for (int count=0; count<strip[i]; count++){
+					cout << setw(max(header[iter->first].length, static_cast<int>(iter->first.length())) +1) << ValueToString (iter->second,iter->first);
+					iter++;
+				}
+				cout <<endl;
+			}
+			iterData+=strip[i];	
+			cout <<endl;
+		}
+
+	}
+
+	void DBTableTxt::WriteDBTable(string tabName){
+		ofstream out(tabName);
+
+		if (!out.is_open()) {
+			cout << "Cannot open file: " << tabName << " for reading\n";
+			return;
+		}
+
+		out << GetTableName() << "|" << GetPrimaryKey() << endl;
+
+		Header header = GetHeader();
+
+		size_t i = 0;
+		for (const auto& a : header) 
+			cout << a.second.colName << "|" << TypeName(a.second.colType) << "|" 
+				 << a.second.length << (i++ < header.size() - 1 ? "|":"\n");
+
+		for (const auto& row : data_) {
+			i = 0;
+			for (const auto& a : row)
+				cout << ValueToString(a.second, a.first) << (i++ < row.size() - 1 ? "|":"\n");
+		}
+		
+	}
+
+	int DBTableTxt::GetSize()
+	{
+		return data_.size();
+	}
+
+	DBType DBTableTxt::GetType(char * columnName)
+	{
+		return columnHeaders_[columnName].colType;
+	}
+
+	void DBTableTxt::SetFileName(string path){
+		fileName_ = path;
+	}
+
+	void DBTableTxt::SetTableName(string tName){
+		tableName_ = tName;
+	}
+
+	void DBTableTxt::SetPrimaryKey(string key){
+		primaryKey_ = key;
+	}
+
+	string DBTableTxt::GetFileName(){
+		return fileName_;
+	}
+
+	string DBTableTxt::GetTableName(){
+		return tableName_;
+	}
+
+	Header DBTableTxt::GetHeader()
+	{
+		return columnHeaders_;
+	}
+
+	void DBTableTxt::SetHeader(Header & hdr){
+		columnHeaders_.clear();
+		columnHeaders_.insert(hdr.begin(), hdr.end());
+	}
+
+	Row DBTableTxt::GetRow(int index){
+		return data_[index];
+	}
+
+	void DBTableTxt::AddRow(Row row, int index) {
+		data_.emplace(data_.begin() + index, row);
+
+	}
+// <----------------------------------------- DBTableSet class ---------------------------------->
+	DBTableSet::DBTableSet(string name) {
+
+	}
+	DBTableTxt * DBTableSet::operator[](string tableName)
+	{
+		return db_[tableName];
+	}
+
+}

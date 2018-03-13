@@ -15,17 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dbmsLib_v1.h">
+    <ClInclude Include="dbmanager.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="dbmsStatLib_v1.lib">
-      <Filter>Исходные файлы</Filter>
-    </Library>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="dbmsLib_v1.cpp">
+    <ClCompile Include="dbmanager.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

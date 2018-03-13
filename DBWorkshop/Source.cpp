@@ -1,19 +1,13 @@
-#include<dbmsLib_v1.h>
+#include <dbmanager.h>
 #include<iostream>
 
-using namespace dbmsLib;
+using namespace dbmanager;
 int main() {
-	setlocale(LC_ALL, "Russian");
-	string pathToDb = "C:\\Users\\Влад\\source\\repos\\DBStatLIb\\LibraryTxt\\Students.csv";	
-	DBTableTxt table, tableTest;
-
-	ReadDBTable1(table, pathToDb);
-
-	tableTest.ReadDBTable(pathToDb);
-
+	setlocale (LC_ALL, "Russian");
+	DBTableTxt table;
+	string pathTo = "D:\\Учеба\\второй семестр\\программирование\\repository\\Project\\LibraryTxt\\Students.csv";
+	table.ReadDBTable(pathTo);
 	table.PrintTable(80);
-	tableTest.PrintTable(80);
-
 	char c;
 	cin >> c;
 	return 0;
