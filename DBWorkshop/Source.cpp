@@ -8,12 +8,12 @@ int main() {
 	table.ReadDBTable(TableChoose());
 	while (true)
 		{
-			dbmanager::print ();
-			switch (menu())
+			switch (Menu())
 				{
 					case 1: table.PrintTable(80);break;
-					case 2: return 0;
-					default: cout <<"please enter the numbers from 1 to 2"<<endl;break;
+					case 2: table.WriteDBTable (table.GetFileName ()); break;
+					case 3: return 0;
+					default: cout <<"please enter the numbers from 1 to 3"<<endl;break;
 				}
 		}
 	char c;

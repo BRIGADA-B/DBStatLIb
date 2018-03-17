@@ -19,17 +19,15 @@ int RightTableName (string tablename)
 		return 1;
 	}
 
-int menu ()
-	{
-		int n;
-		cin >>n;
-		return n;
-	}
-void print ()
+int Menu ()
 	{
 		cout <<endl;
 		cout <<"1: Print table"<<endl;
-		cout <<"2: Finish work with table"<<endl;
+		cout <<"2: Output table into file"<<endl;
+		cout <<"3: Finish work with table"<<endl;
+		int n;
+		cin >>n;
+		return n;
 	}
 
 string  TableChoose () //return path to table (string)

@@ -64,8 +64,7 @@ namespace dbmanager {
 	string GetTabNameFromPath(string path);
 	string ignoreBlanc(const string str);
 	string  TableChoose ();
-	int menu ();
-	void print ();
+	int Menu ();
 
 	void* GetValue(string value, string columnName, Header hdr);
 	void* SetValue(string value, string columnName, Header hdr);
