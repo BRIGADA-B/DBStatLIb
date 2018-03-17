@@ -8,6 +8,46 @@
 
 namespace dbmanager {
 
+int RightTableName (string tablename)
+	{
+		if (tablename=="Books") 
+			return 0;
+		if (tablename=="Students") 
+			return 0;
+		if (tablename=="Abonements") 
+			return 0;
+		return 1;
+	}
+
+int menu ()
+	{
+		int n;
+		cin >>n;
+		return n;
+	}
+void print ()
+	{
+		cout <<endl;
+		cout <<"1: Print table"<<endl;
+		cout <<"2: Finish work with table"<<endl;
+	}
+
+string  TableChoose () //return path to table (string)
+	{
+			cout <<"Enter table name: \n1)Students\n2)Abonements\n3)Books\n"<<endl;
+			string name;
+			cin >>name;
+			while (RightTableName(name)) 
+				{
+					cout <<"Incorrect table name, please enter again"<<endl;
+					name="";
+					cin >>name;
+				}
+			name="LibraryTxt\\"+name;
+			name+=".csv";
+			return name;
+	}
+
 // <----------------------------------------- DBDate class ---------------------------------->
 	DBDate::DBDate(string date) {
 
