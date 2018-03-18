@@ -1,29 +1,36 @@
-# Библиотека для работы с БД
-## Как начать работать над проектом?
-1. Установить  VS 2017.
-2. Скачать расширение для работы с GitHub https://visualstudio.github.com/
-3. Установить VS 2012. http://file.sampo.ru/8v6r86/
-4. На главной странице VS 2017. В Открытие-> Извлечь из : GitHub. Заходите под своим аккаунтом. И клонируете BRIGARD-b/DBStatLIb.
-5. В меню Файл->Открыть->Решение или проект->(Папка куда вы клонировали проект) открываете файл DBStatLIb.sln
-6. Заходим в Свойства проекта в Обозревателе решений. В шапке выбираем Платформа-> win32.
-7. Собираем проект.
-8. (не забываем делать DBWorkshop автозагружаемым).
-9. Работаем :)))
-## Архитектура проекта?
+# СУБД DBStatlib
 
-Проект **DBStatLib** - статическая библиотека, которую мы должны написать сами.
-Состоит из:
-- dbmsLib_v1.h - описание классов, функций, области видимости
-- dbmsLib_v1.cpp - реализация классов, функций, область видимости
-- dbmsStatLib_v1.lib - реализация классов, функций, область видимости от преподавателя в виде статической библиотеки.
+## Прогресс разработки
 
-Проект **DBWorkshop** - из названия "мастерская". Здесь необходимо тестировать вашу задачу.
-- Source.cpp - файл тестированния.
+Завершенность классов:
 
-Папка **LibraryTxt** - База данных .csv
+- DBDate - 0%
+- DBTableTxt - 80%
+- DBTableSet - 0%
 
-## Схема разработки
+Незаконченные / неизвестные глобальные функции:
 
-Для каждой задачи создается отдельная ветка, от ветки **develop**. Должна иметь осмысленное название, к примеру "feature ReadTable1"
-Если вы решили поставленную задачу, то создаете *pull request* в **develop** ветку. Если ваше решение не содержит ошибок, то оно будет слито с веткой **develop**.
+- `string ignoreBlanc(const string str);`
+- `void* GetValue(string value, string columnName, Header hdr);`
+- `void* SetValue(string value, string columnName, Header hdr);`
+- `bool comparator(DBType type, void *obj1, Condition condition, void *obj);`
+- `int GetLength(ColumnDesc colDesc);`
+- `string GetTabNameFromPath(string path);`
 
+
+Внедренные функции в DBTableTxt:
+
+1.  ReadTable
+2.  WriteTable (Вывод таблицы в файл)
+3.  PrintTable ( Выводит таблицы в stdout)
+4.  Меню для выбора с какой DBTable работать
+5.  Создание макета DBTable на основе ширины экрана
+
+Незаконченные/неизвестные функции в DBTableTxt:
+
+- `DBTableTxt(string tabName, Header hdr, string primKey);`
+- `DBTableTxt(string tabName);`
+- `DBTableTxt() {}`
+- `Row operator[](int ind);`
+- `vector<int> IndexOfRecord(void* keyValue, string keyColumnName);`
+- `Row CreateRow();` 
