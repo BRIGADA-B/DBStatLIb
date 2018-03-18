@@ -248,6 +248,9 @@ string  TableChoose () //return path to table (string)
 	}
 
 	void DBTableTxt::PrintTable(int screenWidth){
+		if (screenWidth <= 0) {
+			cout << "Error cannot printTable due to small screenWidth" << screenWidth << endl;
+		}
 		Header header = GetHeader();
 
 		for (const auto& a : header) //check for possibility of print table
@@ -324,13 +327,13 @@ string  TableChoose () //return path to table (string)
 
 		size_t i = 0;
 		for (const auto& a : header) 
-			cout << a.second.colName << "|" << TypeName(a.second.colType) << "|" 
+			out << a.second.colName << "|" << TypeName(a.second.colType) << "|" 
 				 << a.second.length << (i++ < header.size() - 1 ? "|":"\n");
 
 		for (const auto& row : data_) {
 			i = 0;
 			for (const auto& a : row)
-				cout << ValueToString(a.second, a.first) << (i++ < row.size() - 1 ? "|":"\n");
+				out << ValueToString(a.second, a.first) << (i++ < row.size() - 1 ? "|":"\n");
 		}
 		
 	}
