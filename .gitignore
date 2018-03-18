@@ -22,11 +22,15 @@ bld/
 [Oo]bj/
 [Ll]og/
 
-# Visual Studio 2015 cache/options directory
-.vs/
+#Project DBStatLib 
 Source.cpp
 DBWorkshop/Source.cpp
-# Uncomment if you have tasks that create the project's static files in wwwroot
+DBWorkshop/LibraryTxt/
+DBWorkshop/DBWorkshop.vcxproj
+
+# Visual Studio 2015 cache/options directory
+.vs/
+ Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 
 # MSTest test Results
