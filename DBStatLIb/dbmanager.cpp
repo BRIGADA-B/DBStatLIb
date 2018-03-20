@@ -80,6 +80,24 @@ string  TableChoose () //return path to table (string)
 				else return 1;
 	}
 
+	int DBDate::GetDaysInMonth (int m, int y) {
+		switch (m){
+			case 1 : return 31;
+			case 3 : return 31;
+			case 5 : return 31;
+			case 7 : return 31;
+			case 8 : return 31;
+			case 10 : return 31;
+			case 12 : return 31;
+			case 2: 
+				{
+					if (IsLeapYear (y)) return 29; 
+						else return 28;
+				}
+			default : return 30;
+		}
+	}
+
 	int DBDate::GetDay()
 	{
 		return day_;
