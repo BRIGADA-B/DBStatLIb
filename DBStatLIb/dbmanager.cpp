@@ -117,6 +117,34 @@ string  TableChoose () //return path to table (string)
 			return 0;
 	}
 
+	bool DBDate::operator< (DBDate& date) {
+		if (day_<date.day_) return 1;
+		if (month_<date.month_) return 1;
+		if (year_<date.year_) return 1;
+		return 0;
+	}
+
+	bool DBDate::operator<= (DBDate& date) {
+		if (day_<=date.day_) return 1;
+		if (month_<=date.month_) return 1;
+		if (year_<=date.year_) return 1;
+		return 0;
+	}
+
+	bool DBDate::operator> (DBDate& date) {
+		if (day_>date.day_) return 1;
+		if (month_>date.month_) return 1;
+		if (year_>date.year_) return 1;
+		return 0;
+	}
+
+	bool DBDate::operator>= (DBDate& date) {
+		if (day_>=date.day_) return 1;
+		if (month_>=date.month_) return 1;
+		if (year_>=date.year_) return 1;
+		return 0;
+	}
+
 	int DBDate::GetDay()
 	{
 		return day_;
