@@ -48,7 +48,36 @@ string  TableChoose () //return path to table (string)
 
 // <----------------------------------------- DBDate class ---------------------------------->
 	DBDate::DBDate(string date) {
+		string buf="";
+		int k=0;
+		int *data=new int [3];
+		for (int i=0; i<date.size(); i++){
+			while (date [i]!='.' && i<date.size()){
+				buf+=date[i];
+				i++;
+			}
 
+			data[k]=stoi (buf);
+			k++;
+			buf="";
+		}	
+
+		SetDay (data [0]);
+		SetMonth (data [1]);
+		SetYear (data [2]);
+		delete data;
+	}
+
+	DBDate::DBDate (int d, int m, int y){
+		SetDay (d);
+		SetMonth (m);
+		SetYear (y);
+	}
+
+	bool DBDate::IsLeapYear (int y){
+		if (y % 4 !=0) return 0;
+			else if (y % 100 ==0 && y % 400 !=0) return 0;
+				else return 1;
 	}
 
 	int DBDate::GetDay()
@@ -64,6 +93,18 @@ string  TableChoose () //return path to table (string)
 	int DBDate::GetYear()
 	{
 		return year_;
+	}
+
+	void DBDate::SetDay (int d){
+		day_=d;
+	}
+
+	void DBDate::SetMonth (int m){
+		month_=m;
+	}
+
+	void DBDate::SetYear (int y){
+		year_=y;
 	}
 
 // <----------------------------------------- DBTableTxt class ---------------------------------->

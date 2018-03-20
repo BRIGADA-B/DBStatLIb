@@ -25,6 +25,9 @@ namespace dbmanager {
 		int GetDay();
 		int GetMonth();
 		int GetYear();
+		void SetDay (int day);
+		void SetMonth (int month);
+		void SetYear (int year);
 		bool IsLeapYear(int year); 
 		int GetDaysInMonth(int month, int year);
 		int DaysInCurYear();
