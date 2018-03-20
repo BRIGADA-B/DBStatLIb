@@ -110,6 +110,13 @@ string  TableChoose () //return path to table (string)
 			return 0;
 	}
 
+	bool DBDate::operator!= (DBDate& date){
+		if (day_!=date.day_ || month_!=date.month_ || year_!=date.year_)
+			return 1;
+		else 
+			return 0;
+	}
+
 	int DBDate::GetDay()
 	{
 		return day_;
