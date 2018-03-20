@@ -98,6 +98,11 @@ string  TableChoose () //return path to table (string)
 		}
 	}
 
+	int DBDate::DaysInCurYear (){
+		if (IsLeapYear (year_)) return 366;
+			else return 365;
+	}
+
 	int DBDate::GetDay()
 	{
 		return day_;
