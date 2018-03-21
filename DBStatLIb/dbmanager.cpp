@@ -98,9 +98,68 @@ string  TableChoose () //return path to table (string)
 		}
 	}
 
-	int DBDate::DaysInCurYear (){
-		if (IsLeapYear (year_)) return 366;
+	int DBDate::GetDaysInYear (int year){
+		if (IsLeapYear (year)) return 366;
 			else return 365;
+	}
+
+	void DBDate::Set (int d, int m, int y){
+		SetDay (d);
+		SetMonth (m);
+		SetYear (y);
+	}
+
+	int DBDate::operator- (DBDate& date){
+		DBDate buf (day_, month_, year_);
+
+		if (buf==date) return 0;
+
+		DBDate dateL, dateR;
+
+		if (buf>date){
+			dateL.Set (date.day_, date.month_, date.year_);
+			dateR.Set (day_, month_, year_);
+		}
+		else {
+			dateR.Set (date.day_, date.month_, date.year_);
+			dateL.Set (day_, month_, year_);
+		}
+
+		int countDays=0;
+
+		if (dateL.year_!=dateR.year_)
+			{
+				for (int i=dateL.year_+1; i<dateR.year_; i++)
+					countDays+=GetDaysInYear (i);
+
+				for (int i=dateL.month_+1; i<=12; i++)
+					countDays+=GetDaysInMonth (i, dateL.year_);
+
+				countDays+=GetDaysInMonth (dateL.month_, dateL.year_)-dateL.day_;
+
+				for (int i=1; i<dateR.month_; i++)
+					countDays+=GetDaysInMonth (i, dateR.year_);
+
+				countDays+=dateR.day_;
+			}
+		else
+			{
+				if (dateL.month_==dateR.month_)
+					{
+						if (dateL.day_!=dateR.day_) 
+							countDays=dateR.day_-dateL.day_-1;
+					}
+				else
+					{
+						for (int i=dateL.month_+1; i<dateR.month_; i++)
+							countDays+=GetDaysInMonth (i, dateL.year_);
+
+						countDays+=GetDaysInMonth (dateL.month_, dateL.year_)-dateL.day_;
+
+						countDays+=dateR.day_;
+					}
+			}
+		return countDays;
 	}
 
 	bool DBDate::operator== (DBDate& date){
@@ -118,31 +177,95 @@ string  TableChoose () //return path to table (string)
 	}
 
 	bool DBDate::operator< (DBDate& date) {
-		if (day_<date.day_) return 1;
-		if (month_<date.month_) return 1;
-		if (year_<date.year_) return 1;
-		return 0;
+		if (year_<date.year_) 
+			return 1;
+		else{
+			if (year_>date.year_)
+				return 0;
+			else{
+				if (month_<date.month_)
+					return 1;
+				else{
+					if (month_>date.month_)
+						return 0;
+					else{
+						if (day_<date.day_)
+							return 1;
+						else
+							return 0;
+					}
+				}
+			}
+		}
 	}
 
 	bool DBDate::operator<= (DBDate& date) {
-		if (day_<=date.day_) return 1;
-		if (month_<=date.month_) return 1;
-		if (year_<=date.year_) return 1;
-		return 0;
+		if (year_<date.year_) 
+			return 1;
+		else{
+			if (year_>date.year_)
+				return 0;
+			else{
+				if (month_<date.month_)
+					return 1;
+				else{
+					if (month_>date.month_)
+						return 0;
+					else{
+						if (day_<=date.day_)
+							return 1;
+						else
+							return 0;
+					}
+				}
+			}
+		}
 	}
 
 	bool DBDate::operator> (DBDate& date) {
-		if (day_>date.day_) return 1;
-		if (month_>date.month_) return 1;
-		if (year_>date.year_) return 1;
-		return 0;
+		if (year_>date.year_) 
+			return 1;
+		else{
+			if (year_<date.year_)
+				return 0;
+			else{
+				if (month_>date.month_)
+					return 1;
+				else{
+					if (month_<date.month_)
+						return 0;
+					else{
+						if (day_>date.day_)
+							return 1;
+						else
+							return 0;
+					}
+				}
+			}
+		}
 	}
 
 	bool DBDate::operator>= (DBDate& date) {
-		if (day_>=date.day_) return 1;
-		if (month_>=date.month_) return 1;
-		if (year_>=date.year_) return 1;
-		return 0;
+		if (year_>date.year_) 
+			return 1;
+		else{
+			if (year_<date.year_)
+				return 0;
+			else{
+				if (month_>date.month_)
+					return 1;
+				else{
+					if (month_<date.month_)
+						return 0;
+					else{
+						if (day_>=date.day_)
+							return 1;
+						else
+							return 0;
+					}
+				}
+			}
+		}
 	}
 
 	int DBDate::GetDay()
