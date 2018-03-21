@@ -67,8 +67,7 @@ string  TableChoose () //return path to table (string)
 	}
 
 // <----------------------------------------- DBTableTxt class ---------------------------------->
-	DBTableTxt::DBTableTxt(string tableName) {
-		
+	DBTableTxt::DBTableTxt(string fileName) : fileName_(fileName) {
 	}
 
 	string DBTableTxt::TypeName(DBType type)
@@ -146,6 +145,7 @@ string  TableChoose () //return path to table (string)
 			return "ERROR";
 		}
 	}
+
 
 	void DBTableTxt::ReadDBTable(string tabName){
 
@@ -387,10 +387,32 @@ string  TableChoose () //return path to table (string)
 
 	}
 // <----------------------------------------- DBTableSet class ---------------------------------->
-	DBTableSet::DBTableSet(string name) {
+
+	void DBTableSet::WriteDB() {
+		for (const auto& dbTable : db_) {
+			dbTable.second->WriteDBTable(dbTable.second->GetFileName());
+			cout << "Table: " << dbTable.first << " was successfully written" << endl;
+		}
+	}
+
+	int DBTableSet::ReadDB()
+	{
+		for (const auto& dbTable : db_) {
+			dbTable.second->ReadDBTable(dbTable.second->GetFileName());
+			cout << "Table: " << dbTable.first << " was successfully read" << endl;
+
+		}
+		return 0;
+	}
+	
+	void DBTableSet::PrintDB(int numcol) {
+		for (const auto& dbTable : db_) {
+			dbTable.second->PrintTable(numcol);
+			cout << "\n\n";
+		}
 
 	}
-	DBTableTxt * DBTableSet::operator[](string tableName)
+	unique_ptr<DBTableTxt>& DBTableSet::operator[](string tableName)
 	{
 		return db_[tableName];
 	}

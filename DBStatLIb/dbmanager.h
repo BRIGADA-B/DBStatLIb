@@ -6,6 +6,7 @@
 #include<iostream>
 #include<map>
 #include<vector>
+#include<memory>
 
 using namespace std;
 
@@ -111,16 +112,17 @@ namespace dbmanager {
 	class DBTableSet
 	{
 	private:
-		string dbName_;
-		map<string, DBTableTxt*> db_;
+		string dbSetName_;
+		map<string, unique_ptr<DBTableTxt>> db_;
 	public:
-		DBTableSet() {};
-		DBTableSet(string name);
+		DBTableSet(){};
+		DBTableSet(string name) : dbSetName_(name) {};
+
 		int ReadDB();
 		void PrintDB(int numcol);
 		void WriteDB();
-		string GetDBName() { return dbName_; }
-		DBTableTxt* operator[](string tableName);
+		string GetDBName() { return dbSetName_; }
+		unique_ptr<DBTableTxt>& operator[](string tableName);
 	};
 
 }
