@@ -268,6 +268,61 @@ string  TableChoose () //return path to table (string)
 		}
 	}
 
+	DBDate& DBDate::operator+= (int days){
+		while (days!=0){
+			if (day_+days<GetDaysInMonth (month_, year_))
+				{
+					day_+=days;
+					days=0;
+				}
+			else
+				{
+					days-=GetDaysInMonth (month_, year_)-day_+1;
+					day_=1;
+					month_+=1;
+
+					if (month_>12)
+						{
+							month_=1;
+							year_+=1;
+						}
+				}
+		}
+
+		DBDate buf (day_, month_, year_);
+		return buf;
+	}
+
+	DBDate& DBDate::operator-= (int days){
+		while (days!=0){
+			if (day_-days>0)
+				{
+					day_-=days;
+					days=0;
+				}
+			else
+				{
+					days-=day_;
+					month_--;
+
+					if (month_<=0)
+						{
+							month_=12;
+							year_--;
+						}
+
+					day_=GetDaysInMonth (month_, year_);
+				}
+		}
+
+		DBDate buf (day_, month_, year_);
+		return buf;
+	}
+
+	void DBDate::Show (){
+		cout <<day_<<'.'<<month_<<'.'<<year_<<endl;
+	}
+
 	int DBDate::GetDay()
 	{
 		return day_;
