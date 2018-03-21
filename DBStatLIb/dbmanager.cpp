@@ -1,6 +1,7 @@
 
 #include "dbmanager.h"
 #include<iostream>
+#include <sstream>
 #include<sstream>
 #include<iomanip>
 #include<fstream>
@@ -30,6 +31,12 @@ int Menu ()
 		return n;
 	}
 
+ostream & operator<<(ostream & out, DBDate & date)
+{
+	cout << date.day_ << "." << date.month_ << "." << date.year_;
+	return out;
+}
+
 string  TableChoose () //return path to table (string)
 	{
 			cout <<"Enter table name: \n1)Students\n2)Abonements\n3)Books\n"<<endl;
@@ -48,30 +55,17 @@ string  TableChoose () //return path to table (string)
 
 // <----------------------------------------- DBDate class ---------------------------------->
 	DBDate::DBDate(string date) {
-		string buf="";
-		int k=0;
-		int *data=new int [3];
-		for (int i=0; i<date.size(); i++){
-			while (date [i]!='.' && i<date.size()){
-				buf+=date[i];
-				i++;
-			}
-
-			data[k]=stoi (buf);
-			k++;
-			buf="";
-		}	
+		string buf;
+		
+		vector<int> data(3);
+		stringstream ss(date);
+		int i = 0;
+		while (getline(ss, buf, '.')) 
+			data[i++] = stoi(buf);	
 
 		SetDay (data [0]);
 		SetMonth (data [1]);
 		SetYear (data [2]);
-		delete data;
-	}
-
-	DBDate::DBDate (int d, int m, int y){
-		SetDay (d);
-		SetMonth (m);
-		SetYear (y);
 	}
 
 	bool DBDate::IsLeapYear (int y){
@@ -289,8 +283,7 @@ string  TableChoose () //return path to table (string)
 				}
 		}
 
-		DBDate buf (day_, month_, year_);
-		return buf;
+		return *this;
 	}
 
 	DBDate& DBDate::operator-= (int days){
@@ -315,12 +308,7 @@ string  TableChoose () //return path to table (string)
 				}
 		}
 
-		DBDate buf (day_, month_, year_);
-		return buf;
-	}
-
-	void DBDate::Show (){
-		cout <<day_<<'.'<<month_<<'.'<<year_<<endl;
+		return *this;
 	}
 
 	int DBDate::GetDay()
