@@ -31,12 +31,6 @@ int Menu ()
 		return n;
 	}
 
-ostream & operator<<(ostream & out, DBDate & date)
-{
-	cout << date.day_ << "." << date.month_ << "." << date.year_;
-	return out;
-}
-
 string  TableChoose () //return path to table (string)
 	{
 			cout <<"Enter table name: \n1)Students\n2)Abonements\n3)Books\n"<<endl;
@@ -54,6 +48,24 @@ string  TableChoose () //return path to table (string)
 	}
 
 // <----------------------------------------- DBDate class ---------------------------------->
+
+string DateToStr(DBDate & date)
+{
+	string res;
+	res += to_string(date.GetDay());
+	res += ".";
+	res += to_string(date.GetMonth());
+	res += ".";
+	res += to_string(date.GetYear());
+	return res;
+}
+
+ostream & operator<<(ostream & out, DBDate & date)
+{
+	cout << date.day_ << "." << date.month_ << "." << date.year_;
+	return out;
+}
+
 	DBDate::DBDate(string date) {
 		string buf;
 		
@@ -411,7 +423,7 @@ string  TableChoose () //return path to table (string)
 		case Double:
 			return to_string(*static_cast<double*>(value));
 		case Date:
-			return "Data"; // TODO: add cast from DBDate -> string
+			return DateToStr(*static_cast<DBDate*>(value)); // TODO: add cast from DBDate -> string
 		case NoType:
 			return "NoType"; // NoType ????????/
 		default:
