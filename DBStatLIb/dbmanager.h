@@ -20,15 +20,19 @@ namespace dbmanager {
 		int day_, month_, year_;
 	public:
 		DBDate(string date);
-		DBDate(int d, int m, int y);
+		DBDate(int d, int m, int y) : day_(d), month_(m), year_(y) {}
 		DBDate() :day_(0), month_(0), year_(0) {};
 		DBDate(DBDate& dat) :day_(dat.day_), month_(dat.month_), year_(dat.year_) {}
 		int GetDay();
 		int GetMonth();
 		int GetYear();
+		void SetDay (int day);
+		void SetMonth (int month);
+		void SetYear (int year);
+		void Set (int d, int m, int y);
 		bool IsLeapYear(int year); 
 		int GetDaysInMonth(int month, int year);
-		int DaysInCurYear();
+		int GetDaysInYear(int year);
 		bool operator==(DBDate& date);
 		bool operator<(DBDate& date);
 		bool operator>(DBDate& date);
