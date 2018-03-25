@@ -1,6 +1,7 @@
 
 #include "dbmanager.h"
 #include<iostream>
+#include <sstream>
 #include<sstream>
 #include<iomanip>
 #include<fstream>
@@ -30,6 +31,11 @@ int Menu ()
 		return n;
 	}
 
+int GetLength(ColumnDesc colDesc)
+{
+	return colDesc.length;
+}
+
 string  TableChoose () //return path to table (string)
 	{
 			cout <<"Enter table name: \n1)Students\n2)Abonements\n3)Books\n"<<endl;
@@ -47,8 +53,279 @@ string  TableChoose () //return path to table (string)
 	}
 
 // <----------------------------------------- DBDate class ---------------------------------->
-	DBDate::DBDate(string date) {
 
+string DateToStr(DBDate & date)
+{
+	string res;
+	res += to_string(date.GetDay());
+	res += ".";
+	res += to_string(date.GetMonth());
+	res += ".";
+	res += to_string(date.GetYear());
+	return res;
+}
+
+ostream & operator<<(ostream & out, DBDate & date)
+{
+	cout << date.day_ << "." << date.month_ << "." << date.year_;
+	return out;
+}
+
+	DBDate::DBDate(string date) {
+		string buf;
+		
+		vector<int> data(3);
+		stringstream ss(date);
+		int i = 0;
+		while (getline(ss, buf, '.')) 
+			data[i++] = stoi(buf);	
+
+		SetDay (data [0]);
+		SetMonth (data [1]);
+		SetYear (data [2]);
+	}
+
+	bool DBDate::IsLeapYear (int y){
+		if (y % 4 !=0) return 0;
+			else if (y % 100 ==0 && y % 400 !=0) return 0;
+				else return 1;
+	}
+
+	int DBDate::GetDaysInMonth (int m, int y) {
+		switch (m){
+			case 1 : return 31;
+			case 3 : return 31;
+			case 5 : return 31;
+			case 7 : return 31;
+			case 8 : return 31;
+			case 10 : return 31;
+			case 12 : return 31;
+			case 2: 
+				{
+					if (IsLeapYear (y)) return 29; 
+						else return 28;
+				}
+			default : return 30;
+		}
+	}
+
+	int DBDate::GetDaysInYear (int year){
+		if (IsLeapYear (year)) return 366;
+			else return 365;
+	}
+
+	void DBDate::Set (int d, int m, int y){
+		SetDay (d);
+		SetMonth (m);
+		SetYear (y);
+	}
+
+	int DBDate::operator- (DBDate& date){
+		DBDate buf (day_, month_, year_);
+
+		if (buf==date) return 0;
+
+		DBDate dateL, dateR;
+
+		if (buf>date){
+			dateL.Set (date.day_, date.month_, date.year_);
+			dateR.Set (day_, month_, year_);
+		}
+		else {
+			dateR.Set (date.day_, date.month_, date.year_);
+			dateL.Set (day_, month_, year_);
+		}
+
+		int countDays=0;
+
+		if (dateL.year_!=dateR.year_)
+			{
+				for (int i=dateL.year_+1; i<dateR.year_; i++)
+					countDays+=GetDaysInYear (i);
+
+				for (int i=dateL.month_+1; i<=12; i++)
+					countDays+=GetDaysInMonth (i, dateL.year_);
+
+				countDays+=GetDaysInMonth (dateL.month_, dateL.year_)-dateL.day_;
+
+				for (int i=1; i<dateR.month_; i++)
+					countDays+=GetDaysInMonth (i, dateR.year_);
+
+				countDays+=dateR.day_;
+			}
+		else
+			{
+				if (dateL.month_==dateR.month_)
+					{
+						if (dateL.day_!=dateR.day_) 
+							countDays=dateR.day_-dateL.day_-1;
+					}
+				else
+					{
+						for (int i=dateL.month_+1; i<dateR.month_; i++)
+							countDays+=GetDaysInMonth (i, dateL.year_);
+
+						countDays+=GetDaysInMonth (dateL.month_, dateL.year_)-dateL.day_;
+
+						countDays+=dateR.day_;
+					}
+			}
+		return countDays;
+	}
+
+	bool DBDate::operator== (DBDate& date){
+		if (day_==date.day_ && month_==date.month_ && year_==date.year_)
+			return 1;
+		else 
+			return 0;
+	}
+
+	bool DBDate::operator!= (DBDate& date){
+		if (day_!=date.day_ || month_!=date.month_ || year_!=date.year_)
+			return 1;
+		else 
+			return 0;
+	}
+
+	bool DBDate::operator< (DBDate& date) {
+		if (year_<date.year_) 
+			return 1;
+		else{
+			if (year_>date.year_)
+				return 0;
+			else{
+				if (month_<date.month_)
+					return 1;
+				else{
+					if (month_>date.month_)
+						return 0;
+					else{
+						if (day_<date.day_)
+							return 1;
+						else
+							return 0;
+					}
+				}
+			}
+		}
+	}
+
+	bool DBDate::operator<= (DBDate& date) {
+		if (year_<date.year_) 
+			return 1;
+		else{
+			if (year_>date.year_)
+				return 0;
+			else{
+				if (month_<date.month_)
+					return 1;
+				else{
+					if (month_>date.month_)
+						return 0;
+					else{
+						if (day_<=date.day_)
+							return 1;
+						else
+							return 0;
+					}
+				}
+			}
+		}
+	}
+
+	bool DBDate::operator> (DBDate& date) {
+		if (year_>date.year_) 
+			return 1;
+		else{
+			if (year_<date.year_)
+				return 0;
+			else{
+				if (month_>date.month_)
+					return 1;
+				else{
+					if (month_<date.month_)
+						return 0;
+					else{
+						if (day_>date.day_)
+							return 1;
+						else
+							return 0;
+					}
+				}
+			}
+		}
+	}
+
+	bool DBDate::operator>= (DBDate& date) {
+		if (year_>date.year_) 
+			return 1;
+		else{
+			if (year_<date.year_)
+				return 0;
+			else{
+				if (month_>date.month_)
+					return 1;
+				else{
+					if (month_<date.month_)
+						return 0;
+					else{
+						if (day_>=date.day_)
+							return 1;
+						else
+							return 0;
+					}
+				}
+			}
+		}
+	}
+
+	DBDate& DBDate::operator+= (int days){
+		while (days!=0){
+			if (day_+days<GetDaysInMonth (month_, year_))
+				{
+					day_+=days;
+					days=0;
+				}
+			else
+				{
+					days-=GetDaysInMonth (month_, year_)-day_+1;
+					day_=1;
+					month_+=1;
+
+					if (month_>12)
+						{
+							month_=1;
+							year_+=1;
+						}
+				}
+		}
+
+		return *this;
+	}
+
+	DBDate& DBDate::operator-= (int days){
+		while (days!=0){
+			if (day_-days>0)
+				{
+					day_-=days;
+					days=0;
+				}
+			else
+				{
+					days-=day_;
+					month_--;
+
+					if (month_<=0)
+						{
+							month_=12;
+							year_--;
+						}
+
+					day_=GetDaysInMonth (month_, year_);
+				}
+		}
+
+		return *this;
 	}
 
 	int DBDate::GetDay()
@@ -66,9 +343,31 @@ string  TableChoose () //return path to table (string)
 		return year_;
 	}
 
+	void DBDate::SetDay (int d){
+		day_=d;
+	}
+
+	void DBDate::SetMonth (int m){
+		month_=m;
+	}
+
+	void DBDate::SetYear (int y){
+		year_=y;
+	}
+
 // <----------------------------------------- DBTableTxt class ---------------------------------->
-	DBTableTxt::DBTableTxt(string tableName) {
-		
+	DBTableTxt::DBTableTxt(string fileName) : fileName_(fileName) {}
+
+	DBTableTxt::DBTableTxt(string tabName, Header hdr, string primKey): tableName_(tabName), columnHeaders_(hdr), primaryKey_(primKey)
+	{
+	}
+	
+	DBTableTxt::~DBTableTxt() {
+		for (auto& rows : data_) {
+			for (auto& row : rows) {
+				delete row.second;
+			}
+		}
 	}
 
 	string DBTableTxt::TypeName(DBType type)
@@ -139,13 +438,14 @@ string  TableChoose () //return path to table (string)
 		case Double:
 			return to_string(*static_cast<double*>(value));
 		case Date:
-			return "Data"; // TODO: add cast from DBDate -> string
+			return DateToStr(*static_cast<DBDate*>(value)); // TODO: add cast from DBDate -> string
 		case NoType:
 			return "NoType"; // NoType ????????/
 		default:
 			return "ERROR";
 		}
 	}
+
 
 	void DBTableTxt::ReadDBTable(string tabName){
 
@@ -348,6 +648,11 @@ string  TableChoose () //return path to table (string)
 		return columnHeaders_[columnName].colType;
 	}
 
+	Row DBTableTxt::operator[](int ind)
+	{
+		return data_[ind];
+	}
+
 	void DBTableTxt::SetFileName(string path){
 		fileName_ = path;
 	}
@@ -387,10 +692,36 @@ string  TableChoose () //return path to table (string)
 
 	}
 // <----------------------------------------- DBTableSet class ---------------------------------->
-	DBTableSet::DBTableSet(string name) {
+
+	void DBTableSet::WriteDB() {
+		for (const auto& dbTable : db_) {
+			dbTable.second->WriteDBTable(dbTable.second->GetFileName());
+			cout << "Table: " << dbTable.first << " was successfully written" << endl;
+		}
+	}
+
+	void DBTableSet::SetDBName(string name){
+		dbSetName_ = name;
+	}
+
+	int DBTableSet::ReadDB()
+	{
+		for (const auto& dbTable : db_) {
+			dbTable.second->ReadDBTable(dbTable.second->GetFileName());
+			cout << "Table: " << dbTable.first << " was successfully read" << endl;
+
+		}
+		return 0;
+	}
+	
+	void DBTableSet::PrintDB(int numcol) {
+		for (const auto& dbTable : db_) {
+			dbTable.second->PrintTable(numcol);
+			cout << "\n\n";
+		}
 
 	}
-	DBTableTxt * DBTableSet::operator[](string tableName)
+	unique_ptr<DBTableTxt>& DBTableSet::operator[](string tableName)
 	{
 		return db_[tableName];
 	}

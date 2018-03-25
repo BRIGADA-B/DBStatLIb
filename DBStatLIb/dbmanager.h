@@ -1,4 +1,4 @@
-#pragma once
+
 #ifndef _DB_MANAGER_H_
 #define _DB_MANAGER_H_
 
@@ -6,6 +6,7 @@
 #include<iostream>
 #include<map>
 #include<vector>
+#include<memory>
 
 using namespace std;
 
@@ -19,15 +20,19 @@ namespace dbmanager {
 		int day_, month_, year_;
 	public:
 		DBDate(string date);
-		DBDate(int d, int m, int y);
+		DBDate(int d, int m, int y) : day_(d), month_(m), year_(y) {}
 		DBDate() :day_(0), month_(0), year_(0) {};
 		DBDate(DBDate& dat) :day_(dat.day_), month_(dat.month_), year_(dat.year_) {}
 		int GetDay();
 		int GetMonth();
 		int GetYear();
+		void SetDay (int day);
+		void SetMonth (int month);
+		void SetYear (int year);
+		void Set (int d, int m, int y);
 		bool IsLeapYear(int year); 
 		int GetDaysInMonth(int month, int year);
-		int DaysInCurYear();
+		int GetDaysInYear(int year);
 		bool operator==(DBDate& date);
 		bool operator<(DBDate& date);
 		bool operator>(DBDate& date);
@@ -111,16 +116,18 @@ namespace dbmanager {
 	class DBTableSet
 	{
 	private:
-		string dbName_;
-		map<string, DBTableTxt*> db_;
+		string dbSetName_;
+		map<string, unique_ptr<DBTableTxt>> db_;
 	public:
-		DBTableSet() {};
-		DBTableSet(string name);
+		DBTableSet(){};
+		DBTableSet(string name) : dbSetName_(name) {};
+
+		void SetDBName(string name);
 		int ReadDB();
 		void PrintDB(int numcol);
 		void WriteDB();
-		string GetDBName() { return dbName_; }
-		DBTableTxt* operator[](string tableName);
+		string GetDBName() { return dbSetName_; }
+		unique_ptr<DBTableTxt>& operator[](string tableName);
 	};
 
 }
