@@ -1,4 +1,4 @@
-#pragma once
+
 #ifndef _DB_MANAGER_H_
 #define _DB_MANAGER_H_
 
@@ -122,6 +122,7 @@ namespace dbmanager {
 		DBTableSet(){};
 		DBTableSet(string name) : dbSetName_(name) {};
 
+		void SetDBName(string name);
 		int ReadDB();
 		void PrintDB(int numcol);
 		void WriteDB();

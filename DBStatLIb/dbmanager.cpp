@@ -31,6 +31,11 @@ int Menu ()
 		return n;
 	}
 
+int GetLength(ColumnDesc colDesc)
+{
+	return colDesc.length;
+}
+
 string  TableChoose () //return path to table (string)
 	{
 			cout <<"Enter table name: \n1)Students\n2)Abonements\n3)Books\n"<<endl;
@@ -351,7 +356,18 @@ ostream & operator<<(ostream & out, DBDate & date)
 	}
 
 // <----------------------------------------- DBTableTxt class ---------------------------------->
-	DBTableTxt::DBTableTxt(string fileName) : fileName_(fileName) {
+	DBTableTxt::DBTableTxt(string fileName) : fileName_(fileName) {}
+
+	DBTableTxt::DBTableTxt(string tabName, Header hdr, string primKey): tableName_(tabName), columnHeaders_(hdr), primaryKey_(primKey)
+	{
+	}
+	
+	DBTableTxt::~DBTableTxt() {
+		for (auto& rows : data_) {
+			for (auto& row : rows) {
+				delete row.second;
+			}
+		}
 	}
 
 	string DBTableTxt::TypeName(DBType type)
@@ -632,6 +648,11 @@ ostream & operator<<(ostream & out, DBDate & date)
 		return columnHeaders_[columnName].colType;
 	}
 
+	Row DBTableTxt::operator[](int ind)
+	{
+		return data_[ind];
+	}
+
 	void DBTableTxt::SetFileName(string path){
 		fileName_ = path;
 	}
@@ -677,6 +698,10 @@ ostream & operator<<(ostream & out, DBDate & date)
 			dbTable.second->WriteDBTable(dbTable.second->GetFileName());
 			cout << "Table: " << dbTable.first << " was successfully written" << endl;
 		}
+	}
+
+	void DBTableSet::SetDBName(string name){
+		dbSetName_ = name;
 	}
 
 	int DBTableSet::ReadDB()
