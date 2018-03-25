@@ -1,19 +1,16 @@
-
 #ifndef _DB_MANAGER_H_
 #define _DB_MANAGER_H_
 
-#include<string>
-#include<iostream>
-#include<map>
-#include<vector>
-#include<memory>
+#include <string>
+#include <iostream>
+#include <map>
+#include <vector>
+#include <memory>
 
 using namespace std;
 
 namespace dbmanager {
-	class DBDate
-	{
-
+	class DBDate {
 		static const int arrDays_[13];
 		friend string DateToStr(DBDate& date);
 		friend ostream& operator<<(ostream& out, DBDate& date);
@@ -113,8 +110,7 @@ namespace dbmanager {
 		void AddRow(Row row, int index);
 	};
 	
-	class DBTableSet
-	{
+	class DBTableSet {
 	private:
 		string dbSetName_;
 		map<string, unique_ptr<DBTableTxt>> db_;
