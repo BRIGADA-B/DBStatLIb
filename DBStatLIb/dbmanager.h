@@ -87,7 +87,7 @@ namespace dbmanager {
 		string TypeName(DBType type);
 		DBType TypeByName(string name);
 		void* readAnyType(string val, DBType type);
-		~DBTableTxt() {}
+		~DBTableTxt();
 		vector<int> IndexOfRecord(void* keyValue, string keyColumnName);
 		string ValueToString(void* value, string columnName);
 		void ReadDBTable(string tabName);//tabName=path+tableName

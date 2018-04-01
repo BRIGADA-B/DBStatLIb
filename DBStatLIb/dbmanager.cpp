@@ -625,6 +625,49 @@ void DBTableTxt::AddRow(Row row, int index) {
 	data_.emplace(data_.begin() + index, row);
 }
 
+void DBTableTxt::WriteTableBin (string fileName){
+	ofstream fout;
+	fout.open (fileName.c_str(), ios::binary|ios::out);
+
+	if (!fout.is_open()){
+		cout <<"File cannot be opened"<<fileName<<endl;
+		system ("pause");
+		return;
+	}
+
+	Header::iterator iterHeader;
+	Row::iterator iterRow;
+
+	char buf [80];
+	strcpy_s (buf,80,tableName_.c_str());
+
+	int len=tableName_.size()+1;
+	fout.write ((char*)&len, 4);
+	fout.write (buf, len);
+
+	strcpy_s (buf, 80, primaryKey_.c_str();
+	len=primaryKey_.size()+1;
+	fout.write ((char*)&len, 4);
+	fout.write (buf, len);
+
+	int size=columnHeaders_.size ();
+	fout.write ((char*)&size, 4);
+	size=sizeof (ColumnDesc);
+
+	for (iterHeader=columnHeaders_.begin(); iterHeader !=columnHeaders_.end(); iterHeader ++)
+		fout.write ((char*)&(iterHeader->second), size);
+
+	int nRows=(int)data_.size();
+	fout.write ((char*)&nRows, 4);
+	for (int i=0; i<nRows; i++){
+
+		for (iterRow=data_[i].begin(); iterRow!=data_[i].end(); iterRow++){
+			size = sizeof (void *);
+			fout.write ((char*)&(iterRow->second), size);
+		}
+
+	}
+}
 // <----------------------------------------- DBTableSet class ---------------------------------->
 
 void DBTableSet::WriteDB() {
