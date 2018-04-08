@@ -70,11 +70,51 @@ string TableChoose() { // returns path to the table (makes it easier)
 	return name;
 =======
 void WriteTableBin(DBTableTxt & table, string filename){
+	ofstream os(filename, ios::binary | ios::out);
+	if (!os.is_open()) {
+		cerr << "Error: can't open " + filename + " for write" << "\n";
+		return;
+	}
+
+	char buff[24];
+	int len = LENGTH;
+
+	// Write table name length 
+	os.write((char*)&len, sizeof(int));
+	
+	//memcpy(buff, table.GetTableName().c_str(), 24);
+
+	// Write table name
+	os.write(table.GetTableName().c_str(), len * sizeof(char));
+
+	// Write primary key length
+	os.write((char*)&len, sizeof(int));
+
+	// Write primary key
+	os.write(table.GetPrimaryKey().c_str(), len * sizeof(char));
 
 }
 
-void ReadTableBin(DBTableTxt & table, string filename){
+void ReadTableBin(DBTableTxt & table, string filename) {
+	ifstream is(filename, ios::binary | ios::in);
 
+	if (!is.is_open()) {
+		cerr << "Error: can't open " + filename << "\n";
+		return;
+	}
+
+	int len;
+	char buf[24];
+
+	is.read((char*)&len, sizeof(int));
+	is.read((char*)&buf, len*sizeof(char));
+
+	cout << buf << "\n";
+
+	is.read((char*)&len, sizeof(int));
+	is.read((char*)&buf, len);
+	
+	cout << buf << "\n";
 }
 
 string  TableChoose () //return path to table (string)
