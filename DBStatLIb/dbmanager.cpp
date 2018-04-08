@@ -53,6 +53,7 @@ int Menu() {
 		return n;
 	}
 
+<<<<<<< HEAD
 int GetLength(ColumnDesc colDesc) {
 	return colDesc.length;
 }
@@ -67,6 +68,30 @@ string TableChoose() { // returns path to the table (makes it easier)
 	name = "LibraryTxt\\" + name;
 	name += ".csv";
 	return name;
+=======
+void WriteTableBin(DBTableTxt & table, string filename){
+
+}
+
+void ReadTableBin(DBTableTxt & table, string filename){
+
+}
+
+string  TableChoose () //return path to table (string)
+	{
+			cout <<"Enter table name: \n1)Students\n2)Abonements\n3)Books\n"<<endl;
+			string name;
+			cin >>name;
+			while (RightTableName(name)) 
+				{
+					cout <<"Incorrect table name, please enter again"<<endl;
+					name="";
+					cin >>name;
+				}
+			name="LibraryTxt\\"+name;
+			name+=".csv";
+			return name;
+>>>>>>> Added prototypes
 	}
 
 // <----------------------------------------- DBDate class ---------------------------------->
