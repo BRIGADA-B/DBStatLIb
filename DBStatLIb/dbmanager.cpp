@@ -8,7 +8,7 @@
 
 namespace dbmanager {
 
-	void* GetValue (DBType colType){
+	void* GetValue (DBType colType){ //return void* with dedicated memory for a specific type
 
 	void* res=nullptr;
 	switch (colType){
@@ -29,7 +29,7 @@ namespace dbmanager {
 	return res;
 }
 
-int GetByte (DBType type, int length){
+int GetByte (DBType type){ //return number of byte for a specific type
 	if (type==Int32) return 4;
 	if (type==Double) return 8;
 	if (type==Date) return sizeof (DBDate);
@@ -62,7 +62,6 @@ string TableChoose() { // returns path to the table (makes it easier)
 	string name; cin >> name;
 	while (RightTableName(name)) {
 		cout << "Incorrect table name, please try again" << endl;
-		//name = "";
 		cin >> name;
 	}
 	name = "LibraryTxt\\" + name;
@@ -654,10 +653,9 @@ void DBTableTxt::AddRow(Row row, int index) {
 	data_.emplace(data_.begin() + index, row);
 }
 
-void DBTableTxt::WriteTableBin (string fileName){
+void DBTableTxt::WriteTableBin (string fileName){ //write into binary file from DBTableTxt
 	ofstream fout;
 	fout.open (fileName.c_str(), ios::binary|ios::out);
-
 	if (!fout.is_open()){
 		cout <<"File cannot be opened"<<fileName<<endl;
 		system ("pause");
@@ -668,37 +666,35 @@ void DBTableTxt::WriteTableBin (string fileName){
 	Row::iterator iterRow;
 	char buf [80];
 
-	strcpy_s (buf,80,tableName_.c_str());
-	int len=LENGTH;
-	fout.write ((char*)&len, 4);
-	fout.write (buf, len);
+	strcpy_s (buf, 80, tableName_.c_str());
+	int len = LENGTH;
+	fout.write ((char*)&len, 4); //write the maximum length of the table name
+	fout.write (buf, len); //write the table name
 
 	strcpy_s (buf, 80, primaryKey_.c_str());
-	len=LENGTH;
-	fout.write ((char*)&len, 4);
-	fout.write (buf, len);
+	fout.write ((char*)&len, 4); //write the maximum length of the primary key
+	fout.write (buf, len); //write the primary key
 
-	int size=columnHeaders_.size ();
-	fout.write ((char*)&size, 4);
-	size=sizeof (ColumnDesc);
-
-	for (iterHeader=columnHeaders_.begin(); iterHeader !=columnHeaders_.end(); iterHeader ++){
-		fout.write ((char*)&(iterHeader->second), size);
+	int nHeaders = columnHeaders_.size ();
+	fout.write ((char*)&nHeaders, 4); //write the number of headers
+	int size = sizeof (ColumnDesc);
+	for (iterHeader = columnHeaders_.begin(); iterHeader != columnHeaders_.end(); iterHeader++){
+		fout.write ((char*)&(iterHeader->second), size); //write the struct "columnDesc" for each header
 	}
 
-	int nRows=data_.size();
-	fout.write ((char*)&nRows, 4);
+	int nRows = data_.size();
+	fout.write ((char*)&nRows, 4); //write the number of data row
 	for (int i=0; i<nRows; i++){
 
-		for (iterRow=data_[i].begin(); iterRow!=data_[i].end(); iterRow++){
-			size = GetByte ( columnHeaders_[iterRow->first].colType, columnHeaders_[iterRow->first].length); 
-			fout.write ((char*)(iterRow->second), size);
+		for (iterRow = data_[i].begin(); iterRow != data_[i].end(); iterRow++){
+			size = GetByte (columnHeaders_[iterRow->first].colType); 
+			fout.write ((char*)(iterRow->second), size); //write void* for each data
 		}
 
 	}
 }
 
-void DBTableTxt::ReadTableBin (string fileName){
+void DBTableTxt::ReadTableBin (string fileName){ //read from binary file
 	ifstream fin;
 	fin.open (fileName.c_str(), ios::binary|ios::in);
 	if (!fin.is_open()){
@@ -709,42 +705,43 @@ void DBTableTxt::ReadTableBin (string fileName){
 
 	int len;
 	char buf[80];
-	fin.read((char*)&len,4);
-	fin.read((char*)buf,len);
+	fin.read ((char*)&len, 4); //read 4 bite = the number of bytes to read for the table name
+	fin.read ((char*)buf, len); //read table name
 	if(len>79){
-		cout<<"Ошибка: длина имени таблицы "<<fileName<<endl;
+		cout<<"Error: length of table name "<<fileName<<endl;
 		return;
 	}
 	buf[len]='\0';
-
 	tableName_=buf;
-	fin.read((char*)&len,4);
-	fin.read((char*)buf,len);
+
+	fin.read ((char*)&len, 4); //read 4 bite = the number of bytes to read for the the primaty key
+	fin.read ((char*)buf, len);
 	if(len>79){
-		cout<<"Ошибка: длина имени primaryKey таблицы "<<fileName<<endl;
+		cout<<"Error: length of primary key "<<fileName<<endl;
 		return;
 	}
 	buf[len]='\0';
 	primaryKey_=buf;
 	
-	fin.read ((char*)&len, 4);
-	ColumnDesc obj;
+	fin.read ((char*)&len, 4); //read 4 bite = the number of headers
+	ColumnDesc bufHeader;
 	for (int i=0; i<len; i++){
-		fin.read ((char*)&obj, sizeof (ColumnDesc));
-		columnHeaders_[obj.colName]=obj;
+		fin.read ((char*)&bufHeader, sizeof (ColumnDesc)); //read struct "columnDesc" for each header
+		columnHeaders_[bufHeader.colName] = bufHeader;
 	}
 
-	string bufData;
-	fin.read ((char*)&len, 4);
-	auto iter=columnHeaders_.begin();
-	Row row;
+	fin.read ((char*)&len, 4); //read 4 bite = the number of data row
+	auto iter = columnHeaders_.begin();
+	Row bufRow;
 	for (int i=0; i<len; i++){
+
 		for (iter=columnHeaders_.begin(); iter!=columnHeaders_.end(); iter++){
 			void* tmp = GetValue (iter->second.colType);
-			fin.read ((char*)tmp, GetByte (iter->second.colType, iter->second.length));
-			row[iter->first] = tmp;
+			fin.read ((char*)tmp, GetByte (iter->second.colType)); //read void* for each data
+			bufRow[iter->first] = tmp;
 		}
-		data_.push_back (row);
+
+		data_.push_back (bufRow);
 	}
 }
 

@@ -72,10 +72,9 @@ namespace dbmanager {
 	void* SetValue(string value, string columnName, Header hdr);
 	bool comparator(DBType type, void *obj1, Condition condition, void *obj);
 	int GetLength(ColumnDesc colDesc);
-	int GetByte (DBType type, int);
+	int GetByte (DBType type);
 
 	class DBTableTxt {
-
 		Header columnHeaders_;
 		string tableName_;
 		string primaryKey_;
@@ -120,7 +119,6 @@ namespace dbmanager {
 	public:
 		DBTableSet(){};
 		DBTableSet(string name) : dbSetName_(name) {};
-
 		void SetDBName(string name);
 		int ReadDB();
 		void PrintDB(int numcol);
