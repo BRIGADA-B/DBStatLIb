@@ -8,6 +8,35 @@
 
 namespace dbmanager {
 
+	void* GetValue (DBType colType){
+
+	void* res=nullptr;
+	switch (colType){
+		case (1) : 
+			res = new int;
+			break;
+		case (2) :
+			res = new double;
+			break;
+		case (3) :
+			res = new string;
+			break;
+		case (4) :
+			res = new DBDate;
+			break;
+	}
+
+	return res;
+}
+
+int GetByte (DBType type, int length){
+	if (type==Int32) return 4;
+	if (type==Double) return 8;
+	if (type==Date) return sizeof (DBDate);
+	if (type==String) return sizeof (string);
+	if (type==NoType) return sizeof (bool);
+}
+
 int RightTableName(string tablename) {  // choosing a table for test
 		if (tablename == "Books") 
 			return 0;
@@ -580,7 +609,7 @@ int DBTableTxt::GetSize() {
 	return data_.size();
 }
 
-DBType DBTableTxt::GetType(char* columnName) {
+DBType DBTableTxt::GetType(const char* columnName) {
 	return columnHeaders_[columnName].colType;
 }
 
@@ -637,16 +666,15 @@ void DBTableTxt::WriteTableBin (string fileName){
 
 	Header::iterator iterHeader;
 	Row::iterator iterRow;
-
 	char buf [80];
-	strcpy_s (buf,80,tableName_.c_str());
 
-	int len=tableName_.size()+1;
+	strcpy_s (buf,80,tableName_.c_str());
+	int len=LENGTH;
 	fout.write ((char*)&len, 4);
 	fout.write (buf, len);
 
-	strcpy_s (buf, 80, primaryKey_.c_str();
-	len=primaryKey_.size()+1;
+	strcpy_s (buf, 80, primaryKey_.c_str());
+	len=LENGTH;
 	fout.write ((char*)&len, 4);
 	fout.write (buf, len);
 
@@ -654,20 +682,72 @@ void DBTableTxt::WriteTableBin (string fileName){
 	fout.write ((char*)&size, 4);
 	size=sizeof (ColumnDesc);
 
-	for (iterHeader=columnHeaders_.begin(); iterHeader !=columnHeaders_.end(); iterHeader ++)
+	for (iterHeader=columnHeaders_.begin(); iterHeader !=columnHeaders_.end(); iterHeader ++){
 		fout.write ((char*)&(iterHeader->second), size);
+	}
 
-	int nRows=(int)data_.size();
+	int nRows=data_.size();
 	fout.write ((char*)&nRows, 4);
 	for (int i=0; i<nRows; i++){
 
 		for (iterRow=data_[i].begin(); iterRow!=data_[i].end(); iterRow++){
-			size = sizeof (void *);
-			fout.write ((char*)&(iterRow->second), size);
+			size = GetByte ( columnHeaders_[iterRow->first].colType, columnHeaders_[iterRow->first].length); 
+			fout.write ((char*)(iterRow->second), size);
 		}
 
 	}
 }
+
+void DBTableTxt::ReadTableBin (string fileName){
+	ifstream fin;
+	fin.open (fileName.c_str(), ios::binary|ios::in);
+	if (!fin.is_open()){
+		cout <<"File cannot be opened\n";
+		system ("pause");
+		return;
+	}
+
+	int len;
+	char buf[80];
+	fin.read((char*)&len,4);
+	fin.read((char*)buf,len);
+	if(len>79){
+		cout<<"Ошибка: длина имени таблицы "<<fileName<<endl;
+		return;
+	}
+	buf[len]='\0';
+
+	tableName_=buf;
+	fin.read((char*)&len,4);
+	fin.read((char*)buf,len);
+	if(len>79){
+		cout<<"Ошибка: длина имени primaryKey таблицы "<<fileName<<endl;
+		return;
+	}
+	buf[len]='\0';
+	primaryKey_=buf;
+	
+	fin.read ((char*)&len, 4);
+	ColumnDesc obj;
+	for (int i=0; i<len; i++){
+		fin.read ((char*)&obj, sizeof (ColumnDesc));
+		columnHeaders_[obj.colName]=obj;
+	}
+
+	string bufData;
+	fin.read ((char*)&len, 4);
+	auto iter=columnHeaders_.begin();
+	Row row;
+	for (int i=0; i<len; i++){
+		for (iter=columnHeaders_.begin(); iter!=columnHeaders_.end(); iter++){
+			void* tmp = GetValue (iter->second.colType);
+			fin.read ((char*)tmp, GetByte (iter->second.colType, iter->second.length));
+			row[iter->first] = tmp;
+		}
+		data_.push_back (row);
+	}
+}
+
 // <----------------------------------------- DBTableSet class ---------------------------------->
 
 void DBTableSet::WriteDB() {

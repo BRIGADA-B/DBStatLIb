@@ -68,10 +68,11 @@ namespace dbmanager {
 	string  TableChoose ();
 	int Menu ();
 
-	void* GetValue(string value, string columnName, Header hdr);
+	void* GetValue(DBType colType);
 	void* SetValue(string value, string columnName, Header hdr);
 	bool comparator(DBType type, void *obj1, Condition condition, void *obj);
 	int GetLength(ColumnDesc colDesc);
+	int GetByte (DBType type, int);
 
 	class DBTableTxt {
 
@@ -94,7 +95,7 @@ namespace dbmanager {
 		void PrintTable(int screenWidth);
 		void WriteDBTable(string tabName);//tabName=path+tableName	
 		int GetSize();
-		DBType GetType(char* columnName);
+		DBType GetType(const char* columnName);
 		Row operator[](int ind);
 		void SetFileName(string path);
 		void SetTableName(string tName);
@@ -108,6 +109,8 @@ namespace dbmanager {
 		Row CreateRow();
 		Row GetRow(int index);
 		void AddRow(Row row, int index);
+		void WriteTableBin (string fileName);
+		void ReadTableBin (string fileName);
 	};
 	
 	class DBTableSet {
