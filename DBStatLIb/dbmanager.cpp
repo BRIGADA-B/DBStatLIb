@@ -8,7 +8,7 @@
 
 namespace dbmanager {
 
-	void* GetValue (DBType colType){ //return void* with dedicated memory for a specific type
+void* GetValue (DBType colType){ //return void* with dedicated memory for a specific type
 
 	void* res=nullptr;
 	switch (colType){
@@ -91,22 +91,6 @@ int SizeOfTypeByColumnDesc(ColumnDesc desc) {
 
 	return len;
 }
-
-string  TableChoose () //return path to table (string)
-	{
-			cout <<"Enter table name: \n1)Students\n2)Abonements\n3)Books\n"<<endl;
-			string name;
-			cin >>name;
-			while (RightTableName(name)) 
-				{
-					cout <<"Incorrect table name, please enter again"<<endl;
-					name="";
-					cin >>name;
-				}
-			name="LibraryTxt\\"+name;
-			name+=".csv";
-			return name;
-	}
 
 // <----------------------------------------- DBDate class ---------------------------------->
 
@@ -438,10 +422,7 @@ void * DBTableTxt::readAnyType(string val, DBType type) {  // memory allocation 
 			res = new double(stod(val));  // string to double
 			break;
 		case String:
-			val += '\0';
-			res = new char[val.size()];
-			memcpy(res, val.c_str(), val.size());
-
+			res = new string(val);
 			break;
 		case Date:
 			res = new DBDate(val);
@@ -612,7 +593,7 @@ void DBTableTxt::PrintTable(int screenWidth) {
 			for (int k = 0; k < iterData; k++)
 				iter++;
 			for (int count = 0; count < strip[i]; count++) {
-				cout << setw(max(header[iter->first].length, static_cast<int>(iter->first.length())) + 1) << ValueToString(iter->second, iter->first);
+				cout << setw(max (header[iter->first].length,  static_cast<int>(iter->first.length())) + 1) << ValueToString(iter->second, iter->first);
 				iter++;
 			}
 			cout << endl;
@@ -706,6 +687,7 @@ void DBTableTxt::WriteTableBin (string fileName){ //write into binary file from 
 
 	Header::iterator iterHeader;
 	Row::iterator iterRow;
+
 	char buf [80];
 
 	strcpy_s (buf, 80, tableName_.c_str());
