@@ -53,13 +53,12 @@ int Menu() {
 		return n;
 	}
 
-<<<<<<< HEAD
 int GetLength(ColumnDesc colDesc) {
 	return colDesc.length;
 }
 
 string TableChoose() { // returns path to the table (makes it easier)
-	cout <<"Enter the table name:\n1)Students\n2)Abonements\n3)Books\n" << endl;
+	cout << "Enter the table name:\n1)Students\n2)Abonements\n3)Books\n" << endl;
 	string name; cin >> name;
 	while (RightTableName(name)) {
 		cout << "Incorrect table name, please try again" << endl;
@@ -68,53 +67,29 @@ string TableChoose() { // returns path to the table (makes it easier)
 	name = "LibraryTxt\\" + name;
 	name += ".csv";
 	return name;
-=======
-void WriteTableBin(DBTableTxt & table, string filename){
-	ofstream os(filename, ios::binary | ios::out);
-	if (!os.is_open()) {
-		cerr << "Error: can't open " + filename + " for write" << "\n";
-		return;
-	}
-
-	char buff[24];
-	int len = LENGTH;
-
-	// Write table name length 
-	os.write((char*)&len, sizeof(int));
-	
-	//memcpy(buff, table.GetTableName().c_str(), 24);
-
-	// Write table name
-	os.write(table.GetTableName().c_str(), len * sizeof(char));
-
-	// Write primary key length
-	os.write((char*)&len, sizeof(int));
-
-	// Write primary key
-	os.write(table.GetPrimaryKey().c_str(), len * sizeof(char));
-
 }
 
-void ReadTableBin(DBTableTxt & table, string filename) {
-	ifstream is(filename, ios::binary | ios::in);
-
-	if (!is.is_open()) {
-		cerr << "Error: can't open " + filename << "\n";
-		return;
+int SizeOfTypeByColumnDesc(ColumnDesc desc) {
+	int len;
+	switch (desc.colType) {
+	case DBType::Int32:
+		len = 4;
+		break;
+	case DBType::Double:
+		len = 8;
+		break;
+	case DBType::Date:
+		len = 12;
+		break;
+	case DBType::String:
+		len = desc.length * sizeof(char);
+		break;
+	default:
+		cerr << __FUNCTION__ << " " << __LINE__ << "Error: no such type";
+		return 0;
 	}
 
-	int len;
-	char buf[24];
-
-	is.read((char*)&len, sizeof(int));
-	is.read((char*)&buf, len*sizeof(char));
-
-	cout << buf << "\n";
-
-	is.read((char*)&len, sizeof(int));
-	is.read((char*)&buf, len);
-	
-	cout << buf << "\n";
+	return len;
 }
 
 string  TableChoose () //return path to table (string)
@@ -131,7 +106,6 @@ string  TableChoose () //return path to table (string)
 			name="LibraryTxt\\"+name;
 			name+=".csv";
 			return name;
->>>>>>> Added prototypes
 	}
 
 // <----------------------------------------- DBDate class ---------------------------------->
@@ -464,7 +438,10 @@ void * DBTableTxt::readAnyType(string val, DBType type) {  // memory allocation 
 			res = new double(stod(val));  // string to double
 			break;
 		case String:
-			res = new string(val);
+			val += '\0';
+			res = new char[val.size()];
+			memcpy(res, val.c_str(), val.size());
+
 			break;
 		case Date:
 			res = new DBDate(val);

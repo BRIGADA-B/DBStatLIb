@@ -110,6 +110,7 @@ namespace dbmanager {
 		void AddRow(Row row, int index);
 		void WriteTableBin (string fileName);
 		void ReadTableBin (string fileName);
+	
 	};
 	
 	class DBTableSet {
