@@ -776,4 +776,30 @@ void DBTableSet::PrintDB(int numcol) {
 unique_ptr<DBTableTxt>& DBTableSet::operator[](string tableName) {
 	return db_[tableName];
 }
+
+void DBTableSet::SetDB (){
+	string setPath;
+	setPath = "LibraryTxt\\" + dbSetName_;
+	setPath += ".txt";
+
+	ifstream in (setPath);
+	if (!in.is_open()) {
+		cout << "File cannot be opened: " << setPath<< endl;
+		return;
+	}
+
+	string tmp;
+	string tabPath;
+
+	for ( ; !in.eof(); ){
+		getline (in, tmp, '|');
+
+		tabPath = "LibraryTxt\\" + tmp;
+		tabPath += ".csv";
+
+		unique_ptr <DBTableTxt> tab (new DBTableTxt (tabPath));
+		db_ [tmp]=move (tab);
+	}
+}
+
 }

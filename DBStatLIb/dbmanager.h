@@ -56,10 +56,7 @@ namespace dbmanager {
 		DBType colType;
 		int length; 
 	};
-	struct Strip {
-		int nField;
-		int* fieldWidth;
-	};
+
 	typedef map<string, void*> Row;
 	typedef map<string, ColumnDesc> Header;
 
@@ -119,6 +116,7 @@ namespace dbmanager {
 	public:
 		DBTableSet(){};
 		DBTableSet(string name) : dbSetName_(name) {};
+		void SetDB ();
 		void SetDBName(string name);
 		int ReadDB();
 		void PrintDB(int numcol);
