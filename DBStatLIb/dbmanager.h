@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include <memory>
+#include "utils.h"
 
 using namespace std;
 
@@ -41,28 +42,6 @@ namespace dbmanager {
 		int operator-(DBDate& date);
 	};
   
-	enum DBType {
-		NoType,
-		Int32,
-		Double,
-		String,
-		Date
-	};
-	enum Condition { Undefined, Equal, NotEqual, Less, Greater, LessOrEqual, GreaterOrEqual };
-	const int LENGTH = 24;
-	
-	struct ColumnDesc {
-		char colName[LENGTH];
-		DBType colType;
-		int length; 
-	};
-	struct Strip {
-		int nField;
-		int* fieldWidth;
-	};
-	typedef map<string, void*> Row;
-	typedef map<string, ColumnDesc> Header;
-
 	string GetTabNameFromPath(string path);
 	string ignoreBlanc(const string str);
 	string  TableChoose ();
