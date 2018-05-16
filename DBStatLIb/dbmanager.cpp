@@ -5,37 +5,9 @@
 #include <iomanip>
 #include <fstream>
 #include <cassert>
+#include "DBTableTxt.h"
 
 namespace dbmanager {
-
-void* GetValue (DBType colType){ //return void* with dedicated memory for a specific type
-
-	void* res=nullptr;
-	switch (colType){
-		case (1) : 
-			res = new int;
-			break;
-		case (2) :
-			res = new double;
-			break;
-		case (3) :
-			res = new string;
-			break;
-		case (4) :
-			res = new DBDate;
-			break;
-	}
-
-	return res;
-}
-
-int GetByte (DBType type){ //return number of byte for a specific type
-	if (type==Int32) return 4;
-	if (type==Double) return 8;
-	if (type==Date) return sizeof (DBDate);
-	if (type==String) return sizeof (string);
-	if (type==NoType) return sizeof (bool);
-}
 
 int RightTableName(string tablename) {  // choosing a table for test
 		if (tablename == "Books") 
@@ -53,9 +25,6 @@ int Menu() {
 		return n;
 	}
 
-int GetLength(ColumnDesc colDesc) {
-	return colDesc.length;
-}
 
 string TableChoose() { // returns path to the table (makes it easier)
 	cout << "Enter the table name:\n1)Students\n2)Abonements\n3)Books\n" << endl;
@@ -369,18 +338,6 @@ void DBDate::SetYear (int y) {
 }
 
 // <----------------------------------------- DBTableTxt class ---------------------------------->
-
-DBTableTxt::DBTableTxt(string fileName) : fileName_(fileName) {}
-
-DBTableTxt::DBTableTxt(string tabName, Header hdr, string primKey): tableName_(tabName), columnHeaders_(hdr), primaryKey_(primKey) {}
-	
-DBTableTxt::~DBTableTxt() {
-	for (auto& rows : data_) {
-		for (auto& row : rows) {
-			delete row.second;
-		}
-	}
-}
 
 string DBTableTxt::TypeName(DBType type) {  // enum to string
 	if (type == String)

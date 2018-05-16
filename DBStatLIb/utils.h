@@ -26,4 +26,8 @@ namespace dbmanager {
 	typedef std::map<std::string, void*> Row;
 	typedef std::map<std::string, ColumnDesc> Header;
 
+	void* GetValue(DBType colType);
+	int GetByte(DBType type);
+	int GetLength(ColumnDesc colDesc);
+
 }

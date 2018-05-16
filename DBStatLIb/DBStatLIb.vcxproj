@@ -19,13 +19,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dbmanager.h" />
+    <ClInclude Include="DBDate.h" />
     <ClInclude Include="DBTable.h" />
+    <ClInclude Include="DBTableSet.h" />
+    <ClInclude Include="DBTableTxt.h" />
+    <ClInclude Include="Parser.h" />
+    <ClInclude Include="TableNameParser.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dbmanager.cpp" />
+    <ClCompile Include="DBDate.cpp" />
     <ClCompile Include="DBTable.cpp" />
+    <ClCompile Include="DBTableSet.cpp" />
+    <ClCompile Include="DBTableTxt.cpp" />
+    <ClCompile Include="TableNameParser.cpp" />
+    <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -38,7 +46,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

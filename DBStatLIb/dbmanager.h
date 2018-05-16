@@ -7,6 +7,7 @@
 #include <vector>
 #include <memory>
 #include "utils.h"
+#include <string>
 
 using namespace std;
 
@@ -53,7 +54,7 @@ namespace dbmanager {
 	int GetLength(ColumnDesc colDesc);
 	int GetByte (DBType type);
 
-	class DBTableTxt {
+	class DBTableTx {
 		Header columnHeaders_;
 		string tableName_;
 		string primaryKey_;
@@ -91,7 +92,7 @@ namespace dbmanager {
 		void ReadTableBin (string fileName);
 	
 	};
-	
+
 	class DBTableSet {
 	private:
 		string dbSetName_;
