@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Файлы заголовков\Parser">
+      <UniqueIdentifier>{1a49c950-31aa-44f7-bd80-c038c25427ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Parser">
+      <UniqueIdentifier>{70865ed1-d33f-48f4-9841-eb0fa68fae4f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DBTable.h">
@@ -30,11 +36,20 @@
     <ClInclude Include="DBTableSet.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Parser.h">
+    <ClInclude Include="DBTableBin.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="TableNameParser.h">
+    <ClInclude Include="ObjectFactory.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser.h">
+      <Filter>Файлы заголовков\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="PathParser.h">
+      <Filter>Файлы заголовков\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="TableNameParser.h">
+      <Filter>Файлы заголовков\Parser</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -53,8 +68,14 @@
     <ClCompile Include="DBTableSet.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="TableNameParser.cpp">
+    <ClCompile Include="DBTableBin.cpp">
       <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="PathParser.cpp">
+      <Filter>Исходные файлы\Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="TableNameParser.cpp">
+      <Filter>Исходные файлы\Parser</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

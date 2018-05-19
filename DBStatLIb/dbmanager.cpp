@@ -5,7 +5,6 @@
 #include <iomanip>
 #include <fstream>
 #include <cassert>
-#include "DBTableTxt.h"
 
 namespace dbmanager {
 
@@ -339,21 +338,6 @@ void DBDate::SetYear (int y) {
 
 // <----------------------------------------- DBTableTxt class ---------------------------------->
 
-string DBTableTxt::TypeName(DBType type) {  // enum to string
-	if (type == String)
-		return "String";
-	else if (type == Double)
-		return "Double";
-	else if (type == Int32)
-		return "Int32";
-	else if (type == Date)
-		return "Date";
-	else if (type == NoType)
-		return "NoType";
-
-	return "";
-}
-
 DBType DBTableTxt::TypeByName(string name) {  // string to enum
 	if (name == "String")
 		return String;
@@ -391,23 +375,6 @@ void * DBTableTxt::readAnyType(string val, DBType type) {  // memory allocation 
 	return res;
 }
 
-string DBTableTxt::ValueToString(void* value, string columnName) {  // fills allocated memory
-	Header header = GetHeader();
-	switch (header[columnName].colType) {
-	case String:
-		return *static_cast<string*>(value);
-	case Int32:
-		return to_string(*static_cast<int*>(value)); // TODO: Add check for errors
-	case Double:
-		return to_string(*static_cast<double*>(value));
-	case Date:
-		return DateToStr(*static_cast<DBDate*>(value)); // TODO: add cast from DBDate -> string
-	case NoType:
-		return "NoType"; // NoType ????????/
-	default:
-		return "ERROR";
-	}
-}
 
 
 void DBTableTxt::ReadDBTable(string tabName) {
@@ -756,5 +723,9 @@ void DBTableSet::PrintDB(int numcol) {
 
 unique_ptr<DBTableTxt>& DBTableSet::operator[](string tableName) {
 	return db_[tableName];
+}
+string DBTableTx::GetTableName()
+{
+	return string();
 }
 }

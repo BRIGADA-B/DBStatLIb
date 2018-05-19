@@ -4,6 +4,9 @@
 
 namespace dbmanager {
 
+	// –азделитель в операционной системе. Windows: \ ; Linux: / ;
+	const char OS_DELEMITER = '\\';
+
 	enum DBType {
 		NoType,
 		Int32,

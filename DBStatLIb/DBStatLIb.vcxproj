@@ -21,17 +21,22 @@
   <ItemGroup>
     <ClInclude Include="DBDate.h" />
     <ClInclude Include="DBTable.h" />
+    <ClInclude Include="DBTableBin.h" />
     <ClInclude Include="DBTableSet.h" />
     <ClInclude Include="DBTableTxt.h" />
+    <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="Parser.h" />
+    <ClInclude Include="PathParser.h" />
     <ClInclude Include="TableNameParser.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DBDate.cpp" />
     <ClCompile Include="DBTable.cpp" />
+    <ClCompile Include="DBTableBin.cpp" />
     <ClCompile Include="DBTableSet.cpp" />
     <ClCompile Include="DBTableTxt.cpp" />
+    <ClCompile Include="PathParser.cpp" />
     <ClCompile Include="TableNameParser.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>

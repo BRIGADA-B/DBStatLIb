@@ -1,0 +1,4 @@
+Students|StudentID
+Group|String|8|Name|String|16|StudentID|Int32|10
+IU5-21|Ivanov|1
+IU5-21|Petrov|2
