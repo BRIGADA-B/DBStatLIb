@@ -17,7 +17,7 @@ namespace dbmanager {
 	void DBTableBin::CreateRow()
 	{
 	}
-	void DBTableBin::AddRow(const Row& row, int index)
+	void DBTableBin::AddRow(const std::shared_ptr<Row>& row, int index)
 	{
 	}
 	Row DBTableBin::GetRow(size_t index)
@@ -35,5 +35,8 @@ namespace dbmanager {
 	int DBTableBin::GetSize() const
 	{
 		return 0;
+	}
+	void DBTableBin::Clear()
+	{
 	}
 }

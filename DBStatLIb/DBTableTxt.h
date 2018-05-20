@@ -20,12 +20,12 @@ namespace dbmanager {
 		virtual void PrintDBTable(const int) override;
 		virtual void DeleteRow(size_t index) override;
 		virtual void CreateRow() override;
-		virtual void AddRow(const Row& row, int index) override;
+		virtual void AddRow(const std::shared_ptr<Row>& row, int index) override;
 		virtual int GetSize() const override;
 		virtual Row GetRow(size_t index) override;
 		virtual Row operator[](size_t index) override;
 		virtual shared_ptr<DBTable> Select(std::string columnName, Condition cond, void * value) override;
-
+		virtual void Clear() override;
 		string TypeName(DBType type);
 		DBType TypeByName(string name);
 		void* readAnyType(string val, DBType type);
@@ -41,7 +41,7 @@ namespace dbmanager {
 		void ReadTableBin(string fileName);
 
 	private:
-		vector<Row> data_;
+		vector<std::shared_ptr<Row>> data_;
 	};
 
 }

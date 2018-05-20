@@ -1,2 +1,3 @@
 Students|StudentID||||||||||
-StudentID|Int32|10|Firstname|String|16|Surname|String|16|Middlename|String|16
+Firstname|String|16|Middlename|String|16|StudentID|Int32|10|Surname|String|16
+Kirill|Yurievich|1|Tarasov

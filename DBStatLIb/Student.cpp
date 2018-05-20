@@ -13,8 +13,10 @@ namespace dbmanager {
 	{
 		if (IsValidModel()) {
 			try {
-				if (isFirstTimeCreated_)
+				if (isFirstTimeCreated_) {
 					connection_->AddRow(newRow_, ownRow_);
+					isFirstTimeCreated_ = false;
+				}
 				else {
 					connection_->UpdateRow(newRow_, ownRow_);
 				}
@@ -43,7 +45,9 @@ namespace dbmanager {
 
 	void Student::SetFirstName(const std::string& firstName) {
 		firstName_.SetValue(firstName);
-		newRow_->insert({ firstName_.GetColumnName(), (void*)firstName_ });
+
+		newRow_->operator[](firstName_.GetColumnName()) = (void*)firstName_;
+		std::cout << *static_cast<std::string*>(newRow_->operator[](firstName_.GetColumnName()));
 	}
 
 	void Student::SetSurName(const std::string& surName) {

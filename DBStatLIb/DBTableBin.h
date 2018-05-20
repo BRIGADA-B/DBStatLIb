@@ -20,7 +20,7 @@ namespace dbmanager {
 
 		virtual void CreateRow() override;
 
-		virtual void AddRow(const Row& row, int index) override;
+		virtual void AddRow(const std::shared_ptr<Row>& row, int index) override;
 
 		virtual Row GetRow(size_t index) override;
 
@@ -29,6 +29,7 @@ namespace dbmanager {
 		virtual shared_ptr<DBTable> Select(std::string columnName, Condition cond, void * value) override;
 
 		virtual int GetSize() const override;
+		virtual void Clear() override;
 
 	};
 }

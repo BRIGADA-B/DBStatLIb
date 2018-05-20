@@ -13,7 +13,7 @@ namespace dbmanager {
 
 	DBTableTxt::~DBTableTxt() {
 		for (auto& rows : data_) {
-			for (auto& row : rows) {
+			for (auto& row : *rows) {
 				delete row.second;
 			}
 		}
@@ -61,12 +61,10 @@ namespace dbmanager {
 			return;
 		}
 
-		SetFileName(fileName);
-
 		map<int, string> columnNameByIndex;
 
 		Header header;
-		Row row;
+		std::shared_ptr<Row> row( new Row );
 		string tmp;
 
 		// reading table name
@@ -108,17 +106,19 @@ namespace dbmanager {
 			else {  // reading other rows of the table
 				for (int j = 0; j < colCount; j++) {
 					getline(ss, tmpElement, '|');
-					row[columnNameByIndex[j]] = readAnyType(tmpElement, header[columnNameByIndex[j]].colType);
+					row->operator[](columnNameByIndex[j]) = readAnyType(tmpElement, header[columnNameByIndex[j]].colType);
 					
 					
-					if (!row[columnNameByIndex[j]]) {
+					if (!row->operator[](columnNameByIndex[j])) {
 						cout << "cannot read column data: " << columnNameByIndex[j] << "line: " << i - 1;
 					}
 				}
+				CreateRow();
 				AddRow(row, i - 2);
 			}
 		}
 		SetHeader(header);
+		in.close();
 	}
 
 	void DBTableTxt::CreateMaket(map <int, int> &strip, int screenWidth) {  // makes form to print the table
@@ -141,7 +141,7 @@ namespace dbmanager {
 
 	void DBTableTxt::WriteDBTable(const string& fileName)
 	{
-		ofstream out(fileName);
+		ofstream out(fileName, ios_base::trunc);
 
 		if (!out.is_open()) {
 			cout << "Cannot open file: " << fileName << " for reading\n";
@@ -158,10 +158,12 @@ namespace dbmanager {
 
 		for (const auto& row : data_) {
 			i = 0;
-			for (const auto& a : row) {
-				out << ValueToString(a.second, a.first) << (i++ < row.size() - 1 ? "|" : "\n");
+			for (const auto& a : *row) {
+				out << ValueToString(a.second, a.first) << (i++ < row->size() - 1 ? "|" : "\n");
 			}
 		}
+
+		out.close();
 	}
 
 	void DBTableTxt::PrintDBTable(const int screenWidth)
@@ -218,7 +220,7 @@ namespace dbmanager {
 			// prints column data
 
 			for (int z = 0; z < GetSize(); z++) {
-				auto iter = data_[z].begin();
+				auto iter = data_[z]->begin();
 				for (int k = 0; k < iterData; k++)
 					iter++;
 				for (int count = 0; count < strip[i]; count++) {
@@ -244,7 +246,7 @@ namespace dbmanager {
 		data_.emplace_back();
 	}
 
-	void DBTableTxt::AddRow(const Row& row, int index)
+	void DBTableTxt::AddRow(const std::shared_ptr<Row>& row, int index)
 	{
 		data_[index] = row;
 	}
@@ -256,12 +258,18 @@ namespace dbmanager {
 
 	Row DBTableTxt::operator[](size_t index)
 	{
-		return data_[index];
+		return *data_[index];
 	}
 
 	shared_ptr<DBTable> DBTableTxt::Select(std::string columnName, Condition cond, void * value)
 	{
 		return shared_ptr<DBTable>();
+	}
+
+	void DBTableTxt::Clear()
+	{
+		data_.clear();
+		WriteDBTable(GetFileName());
 	}
 
 	void DBTableTxt::WriteTableBin(string fileName) { //write into binary file from DBTableTxt
@@ -299,7 +307,7 @@ namespace dbmanager {
 		fout.write((char*)&nRows, 4); //write the number of data row
 		for (int i = 0; i<nRows; i++) {
 
-			for (iterRow = data_[i].begin(); iterRow != data_[i].end(); iterRow++) {
+			for (iterRow = data_[i]->begin(); iterRow != data_[i]->end(); iterRow++) {
 				size = GetByte(header_[iterRow->first].colType);
 				fout.write((char*)(iterRow->second), size); //write void* for each data
 			}
@@ -345,16 +353,16 @@ namespace dbmanager {
 
 		fin.read((char*)&len, 4); //read 4 bite = the number of data row
 		auto iter = header_.begin();
-		Row bufRow;
+		Row* bufRow;
 		for (int i = 0; i<len; i++) {
 
 			for (iter = header_.begin(); iter != header_.end(); iter++) {
 				void* tmp = GetValue(iter->second.colType);
 				fin.read((char*)tmp, GetByte(iter->second.colType)); //read void* for each data
-				bufRow[iter->first] = tmp;
+				bufRow->operator[](iter->first) = tmp;
 			}
 
-			data_.push_back(bufRow);
+			data_.emplace_back(bufRow);
 		}
 	}
 
