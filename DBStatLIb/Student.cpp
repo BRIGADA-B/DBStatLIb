@@ -35,10 +35,6 @@ namespace dbmanager {
 		middleName_.SetLength(16);
 	}
 
-	Header Student::GetHeader()
-	{
-		return Header();
-	}
 	void Student::Save()
 	{
 		if (IsValidModel()) {
@@ -68,16 +64,21 @@ namespace dbmanager {
 	{
 		return modelName;
 	}
+
+	bool Student::IsColumnNameValid(const std::string & columnName)
+	{
+		return columnName == id_.GetColumnName() || columnName == firstName_.GetColumnName()
+			|| columnName == surName_.GetColumnName() || columnName == middleName_.GetColumnName();
+	}
+
 	void Student::SetId(int id) {
 		idValue_ = id;
 		values[id_.GetColumnName()] = false;
-		std::string colName = id_.GetColumnName();
-		void* voidVal = new int(id);
 
-		if (newRow_->find(colName) != newRow_->end()) {
-			delete (newRow_->at(colName));
-			newRow_->erase(colName);
-		}
+		std::string colName = id_.GetColumnName();
+		void* voidVal = toVoidPtr(id);
+
+		SetValidation(colName);
 
 		newRow_->insert({ colName, voidVal});
 		voidVal = NULL;
@@ -88,46 +89,35 @@ namespace dbmanager {
 	void Student::SetFirstName(const std::string& firstName) {
 		firstNameValue_ = firstName;
 		values[firstName_.GetColumnName()] = false;
-		newRow_->insert({firstName_.GetColumnName(), new std::string(firstNameValue_)});
+		
+		std::string colName = firstName_.GetColumnName();
+		void* voidVal = toVoidPtr(firstName);
+
+		SetValidation(colName);
+
+		newRow_->insert({colName, voidVal});
 	}
 
 	void Student::SetSurName(const std::string& surName) {
 		surNameValue_ = surName;
 		values[surName_.GetColumnName()] = false;
-		newRow_->insert({ surName_.GetColumnName(), new std::string(surNameValue_) });
+		
+		std::string colName = surName_.GetColumnName();
+		void* voidVal = new std::string(surName);
+
+		SetValidation(colName);
+
+		newRow_->insert({ colName, voidVal });
 	}
 	void Student::SetMiddleName(const std::string& middleName) {
 		middleNameValue_ = middleName;
 		values[middleName_.GetColumnName()] = false;
-		newRow_->insert({ middleName_.GetColumnName(), new std::string(middleNameValue_) });
-	}
-
-	vector<Student> Student::getById(int id)
-	{
-		auto vectorOfRows = connection_->Select(id_.GetColumnName(), id);
-		vector<Student> students;
-
-		for (auto& row : vectorOfRows) {
-			//std::cout << *static_cast<int*>(row->at("StudentID"));
-			students.push_back(RowToStudent(row));
-		}
 		
-		return students;
-	}
+		std::string colName = middleName_.GetColumnName();
+		void* voidVal = new std::string(middleName);
 
-	vector<Student> Student::getByFirstName(std::string firstName)
-	{
-		return vector<Student>();
-	}
-
-	bool Student::IsValidModel()
-	{
-		for (auto& f : values) {
-			if (f.second == true)
-				return false;
-		}
-
-		return true;
+		SetValidation(colName);
+		newRow_->insert({ colName, voidVal });
 	}
 
 	Student Student::RowToStudent(std::shared_ptr<Row> & row)
@@ -136,16 +126,16 @@ namespace dbmanager {
 		student.isFirstTimeCreated_ = false;
 		int id = *static_cast<int*>(row->at(id_.GetColumnName()));
 		student.SetId(id);
-		/*
-		std::string fName = *static_cast<std::string*>(row[firstName_.GetColumnName()]);
+		
+		std::string fName = *static_cast<std::string*>(row->at(firstName_.GetColumnName()));
 		student.SetFirstName(fName);
 		
-		std::string sName = *static_cast<std::string*>(row[surName_.GetColumnName()]);
+		std::string sName = *static_cast<std::string*>(row->at(surName_.GetColumnName()));
 		student.SetSurName(sName);
 
-		std::string mName = *static_cast<std::string*>(row[middleName_.GetColumnName()]);
+		std::string mName = *static_cast<std::string*>(row->at(middleName_.GetColumnName()));
 		student.SetMiddleName(mName);
-		*/
+		
 		student.ownRow_ = row;
 
 		return student;

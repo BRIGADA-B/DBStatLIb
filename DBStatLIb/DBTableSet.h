@@ -36,5 +36,7 @@ namespace dbmanager {
 		void WriteDB();
 		std::string GetDBName() { return dbSetName_; }
 		shared_ptr<DBTable>& operator[](std::string tableName);
+
+		void ClearAll();
 	};
 }

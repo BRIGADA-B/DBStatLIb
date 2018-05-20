@@ -1,6 +1,7 @@
 #pragma once
 #include<map>
 #include<string>
+#include<cassert>
 
 namespace dbmanager {
 
@@ -33,5 +34,13 @@ namespace dbmanager {
 	int GetByte(DBType type);
 	int GetLength(ColumnDesc colDesc);
 
+	template<class T>
+	void* toVoidPtr(const T& val) {
+		void* to = static_cast<void*>(new T(val));
+	
+		assert( *static_cast<T*>(to) == val);
+
+		return to;
+	}
 
 }

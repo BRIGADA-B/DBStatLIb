@@ -16,18 +16,15 @@ namespace dbmanager {
 			newRow_ = std::make_shared<Row>();
 
 			values[id_.GetColumnName()] = true;
-
-			//values[firstName_.GetColumnName()] = true;
-			//values[surName_.GetColumnName()] = true;
-			//values[middleName_.GetColumnName()] = true;
+			values[firstName_.GetColumnName()] = true;
+			values[surName_.GetColumnName()] = true;
+			values[middleName_.GetColumnName()] = true;
 		}
 
 		~Student() {}
 		static void setup(const std::shared_ptr<Connection>& connection);
-
 		static void InitColumn();
 
-		Header GetHeader() override;
 		void Save() override;
 		bool Delete() override;
 		std::string GetModelName() override;
@@ -37,10 +34,9 @@ namespace dbmanager {
 		void SetSurName(const std::string&);
 		void SetMiddleName(const std::string&);
 
-		static vector<Student> getById(int id);
-		static vector<Student> getByFirstName(std::string firstName);
+		template<class T>
+		static vector<Student> GetBy(const T& value, const std::string& columnName);
 
-		bool IsValidModel();
 	private:
 		static Column id_;
 		static Column firstName_;
@@ -53,8 +49,25 @@ namespace dbmanager {
 		std::string middleNameValue_;
 
 		static std::shared_ptr<Connection> connection_;
-
 		static Student RowToStudent(std::shared_ptr<Row>&);
+
+		static bool IsColumnNameValid(const std::string& columnName);
 	};
+
+	template<class T>
+	inline vector<Student> Student::GetBy(const T & value, const std::string& columnName)
+	{
+		// Check if columnName true;
+		if (!IsColumnNameValid(columnName)) {
+			throw std::string("There is no such column " + columnName);
+		}
+		auto vectorOfRows = connection_->Select(columnName, value);
+		vector<Student> students;
+		for (auto& row : vectorOfRows) {
+			students.push_back(RowToStudent(row));
+		}
+		return students;
+	}
+
 
 }

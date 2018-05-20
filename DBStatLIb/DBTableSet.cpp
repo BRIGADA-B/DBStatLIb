@@ -91,4 +91,10 @@ namespace dbmanager {
 	shared_ptr<DBTable>& DBTableSet::operator[](string tableName) {
 		return db_[tableName];
 	}
+
+	void DBTableSet::ClearAll() {
+		for (auto& dbTable : db_) {
+			dbTable.second->Clear();
+		}
+	}
 }

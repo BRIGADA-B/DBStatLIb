@@ -65,7 +65,6 @@ namespace dbmanager {
 		map<int, string> columnNameByIndex;
 
 		Header header;
-		std::shared_ptr<Row> row( new Row );
 		string tmp;
 
 		// reading table name
@@ -105,6 +104,8 @@ namespace dbmanager {
 					columnNameByIndex[colCount] = string(columnDesc.colName);
 				}
 			else {  // reading other rows of the table
+				std::shared_ptr<Row> row(new Row);
+
 				for (int j = 0; j < colCount; j++) {
 					getline(ss, tmpElement, '|');
 					row->operator[](columnNameByIndex[j]) = readAnyType(tmpElement, header[columnNameByIndex[j]].colType);
@@ -116,6 +117,7 @@ namespace dbmanager {
 				}
 				CreateRow();
 				AddRow(row, i - 2);
+				row.reset();
 			}
 		}
 		SetHeader(header);

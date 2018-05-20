@@ -24,14 +24,18 @@ namespace dbmanager {
 	template<class T>
 	inline std::vector<std::shared_ptr<Row>> Connection::Select(const std::string columnName, const T & value)
 	{
+		if (isConnected_) {
+			void * voidValue = new T(value);
 
-		void * voidValue = new T(value);
-		
-		// For now we can select only if equal
-		auto rows = table_->Select(columnName, Condition::Equal, voidValue);
+			// For now we can select only if equal
+			auto rows = table_->Select(columnName, Condition::Equal, voidValue);
 
-		delete voidValue;
-		return rows;
+			delete voidValue;
+			return rows;
+		}
+		else {
+			std::cout << "There is no connection with DB\n";
+		}
 	}
 
 }
