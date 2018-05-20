@@ -9,15 +9,12 @@ namespace dbmanager {
 	public:
 
 		// Имя модели совпадает с именем таблицы
-		static std::string modelName;
+		static const std::string modelName;
 
 		Group() {
-			ownRow_ = std::make_shared<Row>();
-			newRow_ = std::make_shared<Row>();
 
 			values[studentId_.GetColumnName()] = true;
 			values[groupName_.GetColumnName()] = true;
-
 		}
 
 		~Group() = default;
@@ -33,6 +30,10 @@ namespace dbmanager {
 		void SetStudentId(int);
 		void SetGroupName(const std::string&);
 
+
+		template<class T>
+		static vector<Group> GetBy(const T& value, const std::string& columnName);
+
 	private:
 		int studentIdValue_;
 		std::string groupNameValue_;
@@ -41,6 +42,9 @@ namespace dbmanager {
 		static Column groupName_;
 				
 		static std::shared_ptr<Connection> connection_;
+
+		static Group RowToGroup(std::shared_ptr<Row>&);
+		static bool IsColumnNameValid(const std::string& columnName);
 
 	};
 

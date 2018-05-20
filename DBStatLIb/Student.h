@@ -12,9 +12,6 @@ namespace dbmanager {
 		static std::string modelName;
 
 		Student() {
-			ownRow_ = std::make_shared<Row>();
-			newRow_ = std::make_shared<Row>();
-
 			values[id_.GetColumnName()] = true;
 			values[firstName_.GetColumnName()] = true;
 			values[surName_.GetColumnName()] = true;
@@ -25,7 +22,7 @@ namespace dbmanager {
 		static void setup(const std::shared_ptr<Connection>& connection);
 		static void InitColumn();
 
-		void Save() override;
+		virtual void Save() override;
 		bool Delete() override;
 		std::string GetModelName() override;
 
@@ -54,6 +51,8 @@ namespace dbmanager {
 		static bool IsColumnNameValid(const std::string& columnName);
 	};
 
+
+	// TODO : full template function, for all models
 	template<class T>
 	inline vector<Student> Student::GetBy(const T & value, const std::string& columnName)
 	{

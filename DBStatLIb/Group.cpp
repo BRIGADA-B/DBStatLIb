@@ -2,7 +2,7 @@
 #include <iostream>
 
 namespace dbmanager {
-	std::string Group::modelName = "Groups";
+	const std::string Group::modelName = "Groups";
 	std::shared_ptr<Connection> Group::connection_ = nullptr;
 
 	Column Group::studentId_;
@@ -26,26 +26,6 @@ namespace dbmanager {
 
 	}
 
-	void Group::Save()
-	{
-		if (IsValidModel()) {
-			try {
-				if (isFirstTimeCreated_) {
-					connection_->AddRow(newRow_, ownRow_);
-					isFirstTimeCreated_ = false;
-				}
-				else {
-					connection_->UpdateRow(newRow_, ownRow_);
-				}
-			}
-			catch (const std::string&ex) {
-				std::cout << ex << "\n";
-			}
-		}
-		else {
-			throw std::string("Some column is empty, cannot save object" + GetModelName());
-		}
-	}
 	bool Group::Delete()
 	{
 		return false;
@@ -54,6 +34,11 @@ namespace dbmanager {
 	std::string Group::GetModelName()
 	{
 		return modelName;
+	}
+
+	void Group::Save()
+	{
+		Model::Save(connection_);
 	}
 
 	void Group::SetStudentId(int id) {

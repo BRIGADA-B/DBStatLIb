@@ -26,6 +26,7 @@
     <ClInclude Include="DBTableBin.h" />
     <ClInclude Include="DBTableSet.h" />
     <ClInclude Include="DBTableTxt.h" />
+    <ClInclude Include="Exam.h" />
     <ClInclude Include="Group.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ObjectFactory.h" />
@@ -43,6 +44,7 @@
     <ClCompile Include="DBTableBin.cpp" />
     <ClCompile Include="DBTableSet.cpp" />
     <ClCompile Include="DBTableTxt.cpp" />
+    <ClCompile Include="Exam.cpp" />
     <ClCompile Include="Group.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="PathParser.cpp" />

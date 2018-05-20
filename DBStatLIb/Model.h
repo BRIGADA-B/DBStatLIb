@@ -7,7 +7,10 @@
 namespace dbmanager {
 	class Model {
 	public:
-		Model() : isFirstTimeCreated_(true), isModelInited_(false) {}
+		Model() : isFirstTimeCreated_(true), isModelInited_(false) {
+			newRow_ = std::make_shared<Row>();
+			ownRow_ = std::make_shared<Row>();
+		}
 
 		virtual ~Model() = default;
 
@@ -15,6 +18,7 @@ namespace dbmanager {
 		virtual bool Delete() = 0;
 		virtual std::string GetModelName() = 0;
 		virtual bool IsValidModel();
+
 	protected:
 		std::string modelName_;
 
@@ -26,5 +30,8 @@ namespace dbmanager {
 		std::map<std::string, bool> values;
 
 		virtual void SetValidation(std::string&);
+		virtual void Save(const std::shared_ptr<Connection>&);
+		static bool IsColumnNameValid(const std::string& columnName);
 	};
+
 }

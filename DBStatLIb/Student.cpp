@@ -37,23 +37,7 @@ namespace dbmanager {
 
 	void Student::Save()
 	{
-		if (IsValidModel()) {
-			try {
-				if (isFirstTimeCreated_) {
-					connection_->AddRow(newRow_, ownRow_);
-					isFirstTimeCreated_ = false;
-				}
-				else {
-					connection_->UpdateRow(newRow_, ownRow_);
-				}
-			}
-			catch (const std::string&ex) {
-				std::cout << ex << "\n";
-			}
-		}
-		else {
-			throw std::string("Some column is empty, cannot save object" + GetModelName());
-		}
+		Model::Save(connection_);
 	}
 	bool Student::Delete()
 	{
@@ -81,9 +65,6 @@ namespace dbmanager {
 		SetValidation(colName);
 
 		newRow_->insert({ colName, voidVal});
-		voidVal = NULL;
-
-		//std::cout << *static_cast<int*>(newRow_->at(id_.GetColumnName()));
 	}
 
 	void Student::SetFirstName(const std::string& firstName) {
