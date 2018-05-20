@@ -59,6 +59,12 @@ namespace dbmanager {
 		newRow_->insert({ middleName_.GetColumnName(), (void*)middleName_ });
 	}
 
+	vector<Student> Student::getById(int id)
+	{
+		
+		auto vectorOfRows = connection_->Select(id_.GetColumnName(), id);
+	}
+
 	bool Student::IsValidModel()
 	{
 		return !id_.IsValueEmpty() && !firstName_.IsValueEmpty()

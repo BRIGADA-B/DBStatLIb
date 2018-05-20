@@ -49,6 +49,9 @@ namespace dbmanager {
 		void SetSurName(const std::string&);
 		void SetMiddleName(const std::string&);
 
+		vector<Student> getById(int id);
+		vector<Student> getByFirstName(std::string firstName);
+
 		bool IsValidModel();
 	private:
 		Column<int> id_;
