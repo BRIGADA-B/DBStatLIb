@@ -239,13 +239,14 @@ namespace dbmanager {
 	}
 
 	void DBTableTxt::CreateRow()
-	{
-
+	{	
+		// Empty row
+		data_.emplace_back();
 	}
 
 	void DBTableTxt::AddRow(const Row& row, int index)
 	{
-		data_.emplace(data_.begin() + index, row);
+		data_[index] = row;
 	}
 
 	Row DBTableTxt::GetRow(size_t index)

@@ -6,6 +6,7 @@ std::vector<std::string> TableNameParser::parse(const std::string & str)
 	std::vector<std::string> res;
 	for (const auto& type : tableTypesName_) {
 		auto resIterator = std::search(str.rbegin(), str.rend(), type.rbegin(), type.rend());
+
 		if (resIterator != str.rend()) {
 			//std::cout << *(resIterator + std::distance(type.begin(), type.end()));
 			//resIterator++;

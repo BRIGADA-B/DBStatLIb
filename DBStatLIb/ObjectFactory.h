@@ -3,6 +3,7 @@
 #include "DBTable.h"
 
 namespace dbmanager {
+
 	class AbstractTableCreator {
 	public:
 		virtual ~AbstractTableCreator() = default;
@@ -29,6 +30,7 @@ namespace dbmanager {
 		template <class C>
 		void add(const std::string& id) {
 			auto it = factory_.find(id);
+
 			if (it == factory_.end()) {
 				factory_[id] = new TableCreator<C>();
 			}
