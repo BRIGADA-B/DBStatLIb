@@ -20,17 +20,17 @@ namespace dbmanager {
 	void DBTableBin::AddRow(const std::shared_ptr<Row>& row, int index)
 	{
 	}
-	Row DBTableBin::GetRow(size_t index)
+	std::shared_ptr<Row> DBTableBin::GetRow(size_t index)
+	{
+		return nullptr;
+	}
+	Row& DBTableBin::operator[](size_t index)
 	{
 		return Row();
 	}
-	Row DBTableBin::operator[](size_t index)
+	std::vector<std::shared_ptr<Row>> DBTableBin::Select(std::string columnName, Condition cond, void * value)
 	{
-		return Row();
-	}
-	shared_ptr<DBTable> DBTableBin::Select(std::string columnName, Condition cond, void * value)
-	{
-		return shared_ptr<DBTable>();
+		return {};
 	}
 	int DBTableBin::GetSize() const
 	{

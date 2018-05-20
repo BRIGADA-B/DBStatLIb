@@ -8,8 +8,8 @@ namespace dbmanager {
 	class Model {
 	public:
 		Model() : isFirstTimeCreated_(true) {
-
 		}
+
 		virtual ~Model() = default;
 
 		virtual Header GetHeader() = 0;
@@ -23,5 +23,7 @@ namespace dbmanager {
 		bool isFirstTimeCreated_;
 		std::shared_ptr<Row> ownRow_;
 		std::shared_ptr<Row> newRow_;
+
+		std::map<std::string, bool> values;
 	};
 }

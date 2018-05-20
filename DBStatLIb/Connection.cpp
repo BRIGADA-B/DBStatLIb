@@ -5,10 +5,14 @@
 namespace dbmanager {
 	void Connection::AddRow(const std::shared_ptr<Row>& newRow, std::shared_ptr<Row>& ownRow)
 	{
+	
 		ownRow->clear();
 		for (const auto& col : *newRow) {
-			std::cout << col.first;
-			ownRow->insert({col.first, col.second});
+			DBType tmpType = table_->GetHeader()[col.first].colType;
+			void* tmp = GetValue(tmpType);
+			memcpy(tmp, col.second, GetByte(tmpType));
+			std::cout << *static_cast<int*>(tmp);
+			ownRow->insert({col.first, tmp});
 		}
 
 		table_->CreateRow();
@@ -18,6 +22,7 @@ namespace dbmanager {
 
 	void Connection::UpdateRow(const std::shared_ptr<Row>& newRow, std::shared_ptr<Row>& ownRow)
 	{
+
 		ownRow->clear();
 		for (const auto& col : *newRow) {
 			ownRow->insert({ col.first, col.second });

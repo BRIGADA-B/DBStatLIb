@@ -8,6 +8,7 @@
 #include <math.h>
 #include <algorithm>
 #include "DBDate.h"
+#include <iterator>
 
 namespace dbmanager {
 
@@ -142,7 +143,6 @@ namespace dbmanager {
 	void DBTableTxt::WriteDBTable(const string& fileName)
 	{
 		ofstream out(fileName, ios_base::trunc);
-
 		if (!out.is_open()) {
 			cout << "Cannot open file: " << fileName << " for reading\n";
 			return;
@@ -251,25 +251,38 @@ namespace dbmanager {
 		data_[index] = row;
 	}
 
-	Row DBTableTxt::GetRow(size_t index)
+	std::shared_ptr<Row> DBTableTxt::GetRow(size_t index)
 	{
-		return Row();
+		return data_[index];
 	}
 
-	Row DBTableTxt::operator[](size_t index)
+	Row& DBTableTxt::operator[](size_t index)
 	{
 		return *data_[index];
 	}
 
-	shared_ptr<DBTable> DBTableTxt::Select(std::string columnName, Condition cond, void * value)
+	vector<std::shared_ptr<Row>> DBTableTxt::Select(std::string columnName, Condition cond, void * value)
 	{
-		return shared_ptr<DBTable>();
+
+		vector<std::shared_ptr<Row>> rows;
+		for (const auto& row : data_) {
+
+			auto first = ValueToString(value, columnName);
+			auto second = ValueToString(row->operator[](columnName), columnName);
+
+			if (first == second)
+				rows.push_back(row);
+		}
+
+		return rows;
 	}
 
 	void DBTableTxt::Clear()
 	{
-		data_.clear();
-		WriteDBTable(GetFileName());
+		if (!data_.empty()) {
+			data_.clear();
+			WriteDBTable(GetFileName());
+		}
 	}
 
 	void DBTableTxt::WriteTableBin(string fileName) { //write into binary file from DBTableTxt

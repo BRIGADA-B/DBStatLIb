@@ -33,4 +33,5 @@ namespace dbmanager {
 	int GetByte(DBType type);
 	int GetLength(ColumnDesc colDesc);
 
+
 }

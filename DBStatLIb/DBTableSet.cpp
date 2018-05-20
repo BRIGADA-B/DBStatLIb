@@ -83,7 +83,7 @@ namespace dbmanager {
 	void DBTableSet::PrintDB(int numcol) {
 		for (const auto& dbTable : db_) {
 			if (dbTable.second)
-				dbTable.second->PrintDBTable(numcol);
+ 				dbTable.second->PrintDBTable(numcol);
 			cout << "\n\n";
 		}
 	}

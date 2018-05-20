@@ -22,9 +22,9 @@ namespace dbmanager {
 		virtual void CreateRow() override;
 		virtual void AddRow(const std::shared_ptr<Row>& row, int index) override;
 		virtual int GetSize() const override;
-		virtual Row GetRow(size_t index) override;
-		virtual Row operator[](size_t index) override;
-		virtual shared_ptr<DBTable> Select(std::string columnName, Condition cond, void * value) override;
+		virtual std::shared_ptr<Row> GetRow(size_t index) override;
+		virtual Row& operator[](size_t index) override;
+		virtual vector<std::shared_ptr<Row>> Select(std::string columnName, Condition cond, void * value) override;
 		virtual void Clear() override;
 		string TypeName(DBType type);
 		DBType TypeByName(string name);
@@ -39,6 +39,11 @@ namespace dbmanager {
 
 		void WriteTableBin(string fileName);
 		void ReadTableBin(string fileName);
+		
+		template<class T>
+		T VoidToValue(void* value) {
+			return *static_cast<T*>(value);
+		}
 
 	private:
 		vector<std::shared_ptr<Row>> data_;

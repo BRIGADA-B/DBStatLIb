@@ -15,29 +15,17 @@ namespace dbmanager {
 			ownRow_ = std::make_shared<Row>();
 			newRow_ = std::make_shared<Row>();
 
-			id_.SetType(DBType::Int32);
-			id_.SetColumnName("StudentID");
-			id_.SetLength(10);
+			values[id_.GetColumnName()] = true;
 
-			firstName_.SetType(DBType::String);
-			firstName_.SetColumnName("Firstname");
-			firstName_.SetLength(16);
-
-			surName_.SetType(DBType::String);
-			surName_.SetColumnName("Surname");
-			surName_.SetLength(16);
-
-			middleName_.SetType(DBType::String);
-			middleName_.SetColumnName("Middlename");
-			middleName_.SetLength(16);
-
+			//values[firstName_.GetColumnName()] = true;
+			//values[surName_.GetColumnName()] = true;
+			//values[middleName_.GetColumnName()] = true;
 		}
+
 		~Student() {}
+		static void setup(const std::shared_ptr<Connection>& connection);
 
-		static void setup(const std::shared_ptr<Connection>& connection) {
-			connection->Connect(modelName);
-			connection_ = connection;
-		}
+		static void InitColumn();
 
 		Header GetHeader() override;
 		void Save() override;
@@ -49,17 +37,24 @@ namespace dbmanager {
 		void SetSurName(const std::string&);
 		void SetMiddleName(const std::string&);
 
-		vector<Student> getById(int id);
-		vector<Student> getByFirstName(std::string firstName);
+		static vector<Student> getById(int id);
+		static vector<Student> getByFirstName(std::string firstName);
 
 		bool IsValidModel();
 	private:
-		Column<int> id_;
-		Column<std::string> firstName_;
-		Column<std::string> surName_;
-		Column<std::string> middleName_;
+		static Column id_;
+		static Column firstName_;
+		static Column surName_;
+		static Column middleName_;
+
+		int idValue_;
+		std::string firstNameValue_;
+		std::string surNameValue_;
+		std::string middleNameValue_;
 
 		static std::shared_ptr<Connection> connection_;
+
+		static Student RowToStudent(std::shared_ptr<Row>&);
 	};
 
 }
