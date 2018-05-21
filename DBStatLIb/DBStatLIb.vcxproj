@@ -32,6 +32,7 @@
     <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="PathParser.h" />
+    <ClInclude Include="Session.h" />
     <ClInclude Include="Student.h" />
     <ClInclude Include="TableNameParser.h" />
     <ClInclude Include="utils.h" />
@@ -48,6 +49,7 @@
     <ClCompile Include="Group.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="PathParser.cpp" />
+    <ClCompile Include="Session.cpp" />
     <ClCompile Include="Student.cpp" />
     <ClCompile Include="TableNameParser.cpp" />
     <ClCompile Include="utils.cpp" />

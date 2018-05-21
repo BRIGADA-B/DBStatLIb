@@ -65,4 +65,30 @@ namespace dbmanager {
 		newRow_->insert({ colName, voidVal });
 	}
 
+	Group Group::RowToGroup(std::shared_ptr<Row>& row)
+	{
+		Group group;
+
+		try {
+			group.isFirstTimeCreated_ = false;
+			std::string groupName = *static_cast<std::string*>(row->at(groupName_.GetColumnName()));
+			group.SetGroupName(groupName);
+
+			int studentId= *static_cast<int*>(row->at(studentId_.GetColumnName()));
+			group.SetStudentId(studentId);
+		}
+		catch (const std::out_of_range& oor) {
+			std::cerr << "Out of range error Exam::RowToExam " << oor.what() << "\n";
+		}
+
+		group.ownRow_ = row;
+
+		return group;
+	}
+
+	bool Group::IsColumnNameValid(const std::string & columnName)
+	{
+		return columnName == studentId_.GetColumnName() || columnName == groupName_.GetColumnName();
+	}
+
 };

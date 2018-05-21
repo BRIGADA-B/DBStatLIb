@@ -15,7 +15,8 @@ namespace dbmanager {
 		DBDate(string date);
 		DBDate(int d, int m, int y) : day_(d), month_(m), year_(y) {}
 		DBDate() :day_(0), month_(0), year_(0) {};
-		DBDate(DBDate& dat) :day_(dat.day_), month_(dat.month_), year_(dat.year_) {}
+		DBDate(const DBDate& dat) :day_(dat.day_), month_(dat.month_), year_(dat.year_) {}
+
 		int GetDay();
 		int GetMonth();
 		int GetYear();
@@ -26,7 +27,8 @@ namespace dbmanager {
 		bool IsLeapYear(int year);
 		int GetDaysInMonth(int month, int year);
 		int GetDaysInYear(int year);
-		bool operator==(DBDate& date);
+		//bool operator==(DBDate& date);
+		friend bool operator==(const DBDate& dateA, const DBDate& dateB);
 		bool operator<(DBDate& date);
 		bool operator>(DBDate& date);
 		bool operator<= (DBDate& date);

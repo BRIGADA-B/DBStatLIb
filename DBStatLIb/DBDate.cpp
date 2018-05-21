@@ -19,6 +19,14 @@ namespace dbmanager {
 		return out;
 	}
 
+	bool operator==(const DBDate& dateA, const DBDate & dateB)
+	{
+		if (dateA.day_ == dateB.day_ && dateA.month_ == dateB.month_ && dateA.year_ == dateB.year_)
+			return true;
+		else
+			return false;
+	}
+
 	DBDate::DBDate(string date) {  // constructor
 		string buf;
 		vector<int> data(3);
@@ -108,14 +116,14 @@ namespace dbmanager {
 		}
 		return countDays;
 	}
-
+/*
 	bool DBDate::operator== (DBDate& date) {  // if dates are the same
 		if (day_ == date.day_ && month_ == date.month_ && year_ == date.year_)
 			return true;
 		else
 			return false;
 	}
-
+	*/
 	bool DBDate::operator!= (DBDate& date) {  // if dates are not the same
 		if (day_ != date.day_ || month_ != date.month_ || year_ != date.year_)
 			return true;

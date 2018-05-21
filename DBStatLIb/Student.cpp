@@ -1,5 +1,6 @@
-#include "Student.h"
 #include <iostream>
+#include "Student.h"
+
 namespace dbmanager {
 
 	std::string Student::modelName = "Students";
@@ -35,10 +36,6 @@ namespace dbmanager {
 		middleName_.SetLength(16);
 	}
 
-	void Student::Save()
-	{
-		Model::Save(connection_);
-	}
 	bool Student::Delete()
 	{
 		return false;
@@ -53,6 +50,11 @@ namespace dbmanager {
 	{
 		return columnName == id_.GetColumnName() || columnName == firstName_.GetColumnName()
 			|| columnName == surName_.GetColumnName() || columnName == middleName_.GetColumnName();
+	}
+
+	void Student::Save()
+	{
+		Model::Save(connection_);
 	}
 
 	void Student::SetId(int id) {

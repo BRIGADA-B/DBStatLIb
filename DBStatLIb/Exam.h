@@ -51,14 +51,14 @@ namespace dbmanager {
 	{
 		// Check if columnName true;
 		if (!IsColumnNameValid(columnName)) {
-			throw std::string("There is no such column " + columnName);
+			throw std::string("Exam: There is no such column " + columnName);
 		}
 		auto vectorOfRows = connection_->Select(columnName, value);
-		vector<Exam> students;
+		vector<Exam> exams;
 		for (auto& row : vectorOfRows) {
-			students.push_back(RowToExam(row));
+			exams.push_back(RowToExam(row));
 		}
-		return students;
+		return exams;
 	}
 
 };

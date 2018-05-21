@@ -30,8 +30,8 @@ namespace dbmanager {
 		std::map<std::string, bool> values;
 
 		virtual void SetValidation(std::string&);
-		virtual void Save(const std::shared_ptr<Connection>&);
-		static bool IsColumnNameValid(const std::string& columnName);
+		void Save(const std::shared_ptr<Connection>&);
+
 	};
 
 }

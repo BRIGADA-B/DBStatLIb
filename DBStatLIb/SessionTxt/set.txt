@@ -1,3 +1,5 @@
 Session
 Students
 Groups
+Exams
+Sessions

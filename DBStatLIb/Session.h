@@ -4,62 +4,64 @@
 #include "Connection.h"
 
 namespace dbmanager {
-	class Group : public Model
+	class Session : public Model
 	{
 	public:
 
-		// »м€ модели совпадает с именем таблицы
 		static const std::string modelName;
-
-		Group() {
-
+		Session() {
 			values[studentId_.GetColumnName()] = true;
-			values[groupName_.GetColumnName()] = true;
+			values[examMark_.GetColumnName()] = true;
+			values[examName_.GetColumnName()] = true;
 		}
 
-		~Group() = default;
+		~Session() = default;
+
+
+		static void setup(const std::shared_ptr<Connection> connection);
+		static void initColumn();
 
 		// ”наследовано через Model
+		virtual void Save() override;
 		virtual bool Delete() override;
 		virtual std::string GetModelName() override;
-		virtual void Save() override;
 
-		static void setup(const std::shared_ptr<Connection>& connection);
-		static void InitColumn();
-
+		void SetExamName(const std::string&);
 		void SetStudentId(int);
-		void SetGroupName(const std::string&);
-
+		void SetExamMark(int);
 
 		template<class T>
-		static vector<Group> GetBy(const T& value, const std::string& columnName);
+		static vector<Session> GetBy(const T& value, const std::string& columnName);
 
 	private:
 		int studentIdValue_;
-		std::string groupNameValue_;
+		std::string examNameValue_;
+		int examMarkValue_;
 
 		static Column studentId_;
-		static Column groupName_;
-				
+		static Column examName_;
+		static Column examMark_;
+
 		static std::shared_ptr<Connection> connection_;
 
-		static Group RowToGroup(std::shared_ptr<Row>&);
+		static Session RowToSession(std::shared_ptr<Row>&);
 		static bool IsColumnNameValid(const std::string& columnName);
 	};
 
 	template<class T>
-	inline vector<Group> Group::GetBy(const T & value, const std::string & columnName)
+	inline vector<Session> Session::GetBy(const T & value, const std::string & columnName)
 	{
 		// Check if columnName true;
 		if (!IsColumnNameValid(columnName)) {
 			throw std::string("There is no such column " + columnName);
 		}
+		
 		auto vectorOfRows = connection_->Select(columnName, value);
-		vector<Group> groups;
+		vector<Session> sessions;
 		for (auto& row : vectorOfRows) {
-			groups.push_back(RowToGroup(row));
+			sessions.push_back(RowToSession(row));
 		}
-		return groups;
+		return sessions;
 	}
 
-};
+}

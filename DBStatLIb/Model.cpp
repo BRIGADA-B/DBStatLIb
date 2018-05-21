@@ -2,6 +2,7 @@
 #include <iostream>
 
 namespace dbmanager {
+
 	void Model::Save(const std::shared_ptr<Connection>& connection)
 	{
 		if (IsValidModel()) {

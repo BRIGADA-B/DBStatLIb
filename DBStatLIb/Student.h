@@ -22,6 +22,8 @@ namespace dbmanager {
 		static void setup(const std::shared_ptr<Connection>& connection);
 		static void InitColumn();
 
+
+		// Унаследовано через Model
 		virtual void Save() override;
 		bool Delete() override;
 		std::string GetModelName() override;

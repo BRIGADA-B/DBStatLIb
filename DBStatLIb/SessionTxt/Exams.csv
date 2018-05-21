@@ -1,2 +1,2 @@
-Exams|Group
-Group|String|20|Examination|String|20|Date|Date|20
+Exams|Group|||||||
+Date|Date|20|Examination|String|20|Group|String|20
