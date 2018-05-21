@@ -30,6 +30,10 @@ namespace dbmanager {
 		void SetStudentId(int);
 		void SetExamMark(int);
 
+		std::string GetExamName() const;
+		int GetStudentId() const;
+		int GetExamMark() const;
+
 		template<class T>
 		static vector<Session> GetBy(const T& value, const std::string& columnName);
 

@@ -103,6 +103,26 @@ namespace dbmanager {
 		newRow_->insert({ colName, voidVal });
 	}
 
+	int Student::GetId() const
+	{
+		return idValue_;
+	}
+
+	std::string Student::GetFirstName() const
+	{
+		return firstNameValue_;
+	}
+
+	std::string Student::GetSurName() const
+	{
+		return surNameValue_;
+	}
+
+	std::string Student::GetMiddleName() const
+	{
+		return middleNameValue_;
+	}
+
 	Student Student::RowToStudent(std::shared_ptr<Row> & row)
 	{
 		Student student;

@@ -85,6 +85,18 @@ namespace dbmanager {
 		newRow_->insert({ colName, voidVal });
 
 	}
+	std::string Session::GetExamName() const
+	{
+		return examNameValue_;
+	}
+	int Session::GetStudentId() const
+	{
+		return studentIdValue_;
+	}
+	int Session::GetExamMark() const
+	{
+		return examMarkValue_;
+	}
 	Session Session::RowToSession(std::shared_ptr<Row>& row)
 	{
 		Session session;

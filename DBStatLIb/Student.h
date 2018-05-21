@@ -32,6 +32,11 @@ namespace dbmanager {
 		void SetFirstName(const std::string&);
 		void SetSurName(const std::string&);
 		void SetMiddleName(const std::string&);
+		
+		int GetId() const;
+		std::string GetFirstName() const;
+		std::string GetSurName() const;
+		std::string GetMiddleName() const;
 
 		template<class T>
 		static vector<Student> GetBy(const T& value, const std::string& columnName);

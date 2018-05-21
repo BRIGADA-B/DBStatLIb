@@ -9,9 +9,12 @@ namespace dbmanager {
 		Progress() = default;
 		~Progress() = default;
 
-		int StudentAvgMark(const std::string& name, const std::string& sname, const std::string& mname);
+		double StudentAvgMark(const std::string& name, const std::string& sname, const std::string& mname);
 		int GroupAvgMark(const std::string& groupName);
 		int ExamAvgMark(const std::string& examName);
+
+		void AddStudent();
+
 	};
 
 }

@@ -66,6 +66,9 @@
     <ClInclude Include="Session.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Progress.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DBTable.cpp">
@@ -111,6 +114,9 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="Session.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Progress.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
