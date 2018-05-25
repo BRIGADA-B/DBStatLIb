@@ -1,0 +1,6 @@
+Books|BookID
+Author|String|12|BookID|Int32|8|Title|String|16|Quantity|Int32|8|Number|Int32|8
+Pushkin|1|EvgeniyOnegin|100|2
+Lermontov|2|Borodino|200|1
+Bulgakov|3|MasterIMargarita|150|1
+Tolstoy|4|VoinaIMir|300|1

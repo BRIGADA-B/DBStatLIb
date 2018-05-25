@@ -1,24 +1,22 @@
-# Библиотека для работы с БД
-## Как начать работать над проектом?
-1. Установить  VS 2017.
-2. Скачать расширение для работы с GitHub https://visualstudio.github.com/
-3. Установить VS 2012. http://file.sampo.ru/8v6r86/
-4. На главной странице VS 2017. В Открытие-> Извлечь из : GitHub. Заходите под своим аккаунтом. И клонируете BRIGARD-b/DBStatLIb.
-5. В меню Файл->Открыть->Решение или проект->(Папка куда вы клонировали проект) открываете файл DBStatLIb.sln
-6. Заходим в Свойства проекта в Обозревателе решений. В шапке выбираем Платформа-> win32.
-7. Собираем проект.
-8. (не забываем делать DBWorkshop автозагружаемым).
-## Архитектура проекта?
+# СУБД DBStatlib
 
-Проект **DBStatLib** - статическая библиотека, которую мы должны написать сами.
-Состоит из:
-- dbmsLib_v1.h - описание классов, функций, области видимости
-- dbmsLib_v1.cpp - реализация классов, функций, область видимости
-- dbmsStatLib_v1.lib - реализация классов, функций, область видимости от преподавателя в виде статической библиотеки.
+## Прогресс разработки
 
-Проект **DBWorkshop** - из названия "мастерская". Здесь необходимо тестировать вашу задачу.
-- Source.cpp - файл тестированния.
+Завершенность классов:
 
-## Схема разработки
+- DBDate - 100%
+- DBTableTxt - 99%
+- DBTableSet - 100%
 
-Для каждой задачи создается отдельная ветка, от ветки **develop**. Должна иметь осмысленное название, к примеру "ReadTable1"
+Незаконченные / неизвестные глобальные функции:
+
+- `string ignoreBlanc(const string str);`
+- `void* GetValue(string value, string columnName, Header hdr);`
+- `void* SetValue(string value, string columnName, Header hdr);`
+- `bool comparator(DBType type, void *obj1, Condition condition, void *obj);`
+- `string GetTabNameFromPath(string path);`
+
+Неизвестные функции в DBTableTxt:
+
+- `vector<int> IndexOfRecord(void* keyValue, string keyColumnName);`
+- `Row CreateRow();` 
