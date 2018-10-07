@@ -1,0 +1,2 @@
+Students|StudentID||||||||||
+Firstname|String|16|Middlename|String|20|StudentID|Int32|10|Surname|String|20

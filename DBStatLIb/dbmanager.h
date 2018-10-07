@@ -6,6 +6,8 @@
 #include <map>
 #include <vector>
 #include <memory>
+#include "utils.h"
+#include <string>
 
 using namespace std;
 
@@ -41,40 +43,18 @@ namespace dbmanager {
 		int operator-(DBDate& date);
 	};
   
-	enum DBType {
-		NoType,
-		Int32,
-		Double,
-		String,
-		Date
-	};
-	enum Condition { Undefined, Equal, NotEqual, Less, Greater, LessOrEqual, GreaterOrEqual };
-	const int LENGTH = 24;
-	
-	struct ColumnDesc {
-		char colName[LENGTH];
-		DBType colType;
-		int length; 
-	};
-	struct Strip {
-		int nField;
-		int* fieldWidth;
-	};
-	typedef map<string, void*> Row;
-	typedef map<string, ColumnDesc> Header;
-
 	string GetTabNameFromPath(string path);
 	string ignoreBlanc(const string str);
 	string  TableChoose ();
 	int Menu ();
 
-	void* GetValue(string value, string columnName, Header hdr);
+	void* GetValue(DBType colType);
 	void* SetValue(string value, string columnName, Header hdr);
 	bool comparator(DBType type, void *obj1, Condition condition, void *obj);
 	int GetLength(ColumnDesc colDesc);
+	int GetByte (DBType type);
 
-	class DBTableTxt {
-
+	class DBTableTx {
 		Header columnHeaders_;
 		string tableName_;
 		string primaryKey_;
@@ -94,7 +74,7 @@ namespace dbmanager {
 		void PrintTable(int screenWidth);
 		void WriteDBTable(string tabName);//tabName=path+tableName	
 		int GetSize();
-		DBType GetType(char* columnName);
+		DBType GetType(const char* columnName);
 		Row operator[](int ind);
 		void SetFileName(string path);
 		void SetTableName(string tName);
@@ -108,8 +88,11 @@ namespace dbmanager {
 		Row CreateRow();
 		Row GetRow(int index);
 		void AddRow(Row row, int index);
-	};
+		void WriteTableBin (string fileName);
+		void ReadTableBin (string fileName);
 	
+	};
+
 	class DBTableSet {
 	private:
 		string dbSetName_;
@@ -117,7 +100,6 @@ namespace dbmanager {
 	public:
 		DBTableSet(){};
 		DBTableSet(string name) : dbSetName_(name) {};
-
 		void SetDBName(string name);
 		int ReadDB();
 		void PrintDB(int numcol);
